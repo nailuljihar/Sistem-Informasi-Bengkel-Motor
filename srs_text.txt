@@ -1,0 +1,1637 @@
+ 
+Software Requirements 
+Specification 
+for 
+SISTEM INFORMASI 
+BENGKEL MOTOR FATIA 
+KAMAL 
+Version 1.0 approved 
+Prepared by  
+240441100015 -Lusi Praticya Dinata 
+240441100032 - Muhammad Nailul Jihar 
+240441100069 - Istikhomah 
+240441100103 - Dini Auliya Mulha 
+240441100127 - Dimas Izzulhaqq Buthomi 
+ 
+ 
+ 
+October 14, 2025
+ 
+ 
+Table of Contents 
+1. Pendahuluan .............................................................................................................................1 
+1.1 Tujuan Penulisan Dokumen ......................................................................................................... 1 
+1.2 Audien yang Dituju dan Pembaca yang Disarankan ................................................................... 1 
+1.3 Batasan Produk ............................................................................................................................ 1 
+1.4 Definisi dan Istilah ...................................................................................................................... 2 
+1.5 Refrensi ........................................................................................................................................ 2 
+2. Deskripsi Keseluruhan ............................................................................................................2 
+2.1 Deskripsi Produk ......................................................................................................................... 2 
+2.2 Fungsi Produk .............................................................................................................................. 3 
+2.3 Penggolongan Karakterik Pengguna ........................................................................................... 3 
+2.4 Lingkungan Operasi .................................................................................................................... 4 
+2.5 Batasan Desain dan Implementasi ............................................................................................... 4 
+2.6 Dokumentasi Pengguna ............................................................................................................... 5 
+2.7 Business Concept Model ............................................................................................................. 5 
+3. Functional Requirement ..........................................................................................................6 
+3.1 Struktural ..................................................................................................................................... 8 
+3.1.1 Data Flow Diagram Level 0 .................................................................................................... 8 
+3.1.2 Data Flow Diagram Level 1 .................................................................................................... 9 
+3.1.3 Logical Level ........................................................................................................................ 10 
+3.1.4 Physical Level ....................................................................................................................... 10 
+3.1.5 Data Dictionary ..................................................................................................................... 11 
+3.1.6 OO-DFD ................................................................................................................................ 12 
+3.2 UML .......................................................................................................................................... 14 
+3.2.1 Use Case Diagram ................................................................................................................. 14 
+3.2.2 Skenario Use case ................................................................................................................. 16 
+3.2.3 Activity Diagram ................................................................................................................... 22 
+3.2.4 Sequence Diagram ................................................................................................................ 32 
+3.2.5 Class Diagram ....................................................................................................................... 42 
+3.2.6 Entity Relationship Diagram ERD ........................................................................................ 43 
+4. Kebutuhan Antarmuka Eksternal........................................................................................45 
+4.1 Prototype .................................................................................................................................... 45 
+4.2 User Interfaces ........................................................................................................................... 57 
+4.3 Hardware Interface .................................................................................................................... 65 
+4.4 Software Interface ..................................................................................................................... 65 
+4.5 Communication Interface .......................................................................................................... 65 
+5 Non Functional Requirement................................................................................................66 
+ 
+Revision History 
+Name Date Reason For Changes Version 
+    
+    
+    
+ 
+ 
+1. Pendahuluan 
+1.1 Tujuan Penulisan Dokumen 
+Dokumen Software Requirements Specification (SRS) ini bertujuan untuk menjelaskan secara 
+rinci kebutuhan perangkat lunak pada Sistem Informasi Bengkel Motor Fatia Kamal. Dokumen 
+Software Requirements Specification (SRS) ini disusun dengan tujuan sebagai berikut: 
+1. Menyediakan pedoman bagi penguji (tester) dalam menyusun skenario dan prosedur 
+pengujian sistem berdasarkan kebutuhan yang telah ditentukan. 
+2. Menjelaskan kebutuhan sistem yang akan dikembangkan pada Sistem Informasi Bengkel 
+Motor Fatia Kamal secara jelas dan terstruktur. 
+3. Memberikan pemahaman yang sama bagi semua pihak terkait, termasuk pemilik bengkel, 
+analis sistem, dan tim pengembang mengenai fungsi dan batasan sistem. 
+4. Menjadi acuan bagi pengembang (developer) dalam proses perancangan, pengkodean, 
+dan implementasi sistem agar sesuai dengan kebutuhan pengguna. 
+1.2 Audien yang Dituju dan Pembaca yang Disarankan 
+ Dokumen ini dituju untuk beberapa pihak yang terlibat dalam proses perencanaan, 
+pengembangan, dan penggunaan Sistem Informasi Bengkel motor Fatia Kamal. Adapun audien yang 
+dituju adalah: 
+1. Pemilik Bengkel Motor Fatia Kamal, sebagai pihak utama yang membutuhkan sistem 
+untuk membantu kegiatan operasional bengkel. 
+2. Tim Pengembang (Developer), sebagai panduan dalam merancang dan membangun 
+sistem sesuai kebutuhan pengguna. 
+3. Analis Sistem, untuk memahami alur kebutuhan dan memastikan sistem berjalan sesuai 
+spesifikasi. 
+4. Stakeholder lain, seperti karyawan bengkel yang menggunakan sistem secara langsung 
+dalam proses pelayanan. 
+1.3 Batasan Produk 
+ Perangkat lunak yang dirancang adalah Sistem Informasi Bengkel Motor Fatia Kamal yang 
+berfokus pada pengelolaan kegiatan operasional bengkel yang meliputi: 
+1. Pendataan pelanggan dan kendaraan. 
+2. Pencatatan layanan servis dan pembelian suku cadang. 
+3. Pengelolaan stok barang dan data mekanik. 
+ 
+ 
+4. Pembuatan laporan transaksi dan aktivitas servis. 
+Sistem ini tidak mencakup fitur pembayaran online, integrasi dengan sistem pihak ketiga, atau 
+sistem keuangan yang kompleks. Produk dikembangkan berbasis web agar dapat diakses melalui 
+perangkat komputer atau laptop oleh admin bengkel. 
+1.4 Definisi dan Istilah 
+● SRS   : Software Requirements Specification 
+     Dokumen spesifikasi kebutuhan perangkat lunak yang berisi deskripsi  
+      lengkap mengenai fungsi, batasan, dan kebutuhan sistem. 
+● IEEE  : Institute of Electrical and Electronics Engineers 
+     Lembaga internasional yang menetapkan standar pengembangan dan  
+     perancangan perangkat lunak dan perangkat keras. 
+● IS   : Information System 
+Aplikasi berbasis komputer yang digunakan untuk mengumpulkan, 
+mengelola, dan menampilkan data agar mendukung kegiatan operasional dan 
+pengambilan keputusan. 
+● USER   : Pengguna 
+Pihak yang menggunakan sistem, seperti admin bengkel, mekanik, atau 
+pemilik bengkel. 
+● DBMS  : Database Management System 
+Kumpulan data yang tersusun secara sistematis untuk menyimpan informasi 
+pelanggan, kendaraan, dan transaksi. 
+1.5 Refrensi 
+IEEE Std 830-1998 —  IEEE Recommended Practice for Software Requirements Specificatio 
+Pemilik Bengkel Motor Fatia Kamal, wawancara pribadi mengenai proses alur dalam bengkel dan 
+pengelolaan stok, Bangkalan, 22 September 2025. 
+2. Deskripsi Keseluruhan 
+2.1 Deskripsi Produk  
+ Sistem Informasi Bengkel Motor Fatia Kamal merupakan aplikasi berbasis web yang 
+dirancang untuk mempermudah pengelolaan operasional bengkel. Sistem ini mencakup pendataan 
+pelanggan dan kendaraan, pengelolaan stok suku cadang, pencatatan layanan servis, serta pembuatan 
+laporan transaksi dan aktivitas bengkel. Selain itu, sistem juga menyediakan fitur manajemen 
+ 
+ 
+mekanik dan penjadwalan servis, sehingga mempermudah koordinasi antar staf bengkel. Sistem 
+dirancang secara modular agar dapat dikembangkan di masa depan, termasuk kemungkinan integrasi 
+dengan sistem keuangan atau pembayaran online. Dengan antarmuka yang s ederhana dan responsif, 
+sistem ini dapat digunakan oleh admin bengkel, mekanik, maupun pelanggan secara efektif dan 
+efisien. 
+2.2 Fungsi Produk  
+ Sistem Informasi Bengkel Motor Fatia Kamal dirancang untuk mendukung seluruh kegiatan 
+operasional bengkel secara efisien dan terstruktur. Secara garis besar, sistem memiliki beberapa 
+fungsi utama sebagai berikut: 
+- Mencatat data pelanggan dan kendaraan secara lengkap dan terstruktur. 
+- Mengelola stok suku cadang dan bahan habis pakai dengan akurat. 
+- Mencatat layanan servis yang dilakukan oleh mekanik. 
+- Membuat laporan transaksi dan aktivitas bengkel secara periodik. 
+2.3 Penggolongan Karakterik Pengguna 
+Sistem Informasi Bengkel Motor Fatia Kamal akan digunakan oleh beberapa jenis pengguna dengan 
+tingkat tanggung jawab dan kebutuhan akses yang berbeda. Setiap pengguna memiliki peran tertentu 
+dalam menjalankan fungsi operasional bengkel, mulai dari pencatat an transaksi hingga pengawasan 
+kinerja. Oleh karena itu, pengelompokan karakteristik pengguna dilakukan untuk memastikan sistem 
+dapat dirancang sesuai kemampuan, kebutuhan, dan hak akses masing-masing. 
+Kategori 
+Pengguna 
+Tugas Hak Akses ke 
+aplikasi 
+Kemampuan yang harus 
+dimiliki 
+Admin 
+Bengkel 
+Mengelola seluruh data sistem 
+seperti pelanggan, kendaraan, 
+mekanik, stok barang, dan 
+laporan. 
+Insert, Update, 
+Delete, View 
+semua data. 
+Mampu mengoperasikan 
+komputer, memahami alur 
+kerja bengkel, dan teliti 
+dalam input data. 
+Mekanik Melihat daftar servis yang harus 
+dikerjakan, memperbarui status 
+pekerjaan. 
+View dan 
+Update data 
+servis. 
+Memahami proses servis 
+kendaraan dan mampu 
+menggunakan aplikasi 
+berbasis web sederhana. 
+ 
+ 
+Kategori 
+Pengguna 
+Tugas Hak Akses ke 
+aplikasi 
+Kemampuan yang harus 
+dimiliki 
+Kasir / 
+Resepsionis 
+Mencatat transaksi servis dan 
+penjualan suku cadang. 
+Insert dan 
+View data 
+transaksi. 
+Terampil menggunakan 
+aplikasi kasir dan 
+berinteraksi dengan 
+pelanggan. 
+Pemilik 
+Bengkel 
+Melihat       laporan operasional 
+dan kinerja bengkel. 
+View data 
+laporan dan 
+ringkasan 
+transaksi. 
+Mampu membaca laporan 
+dan memahami  analisis 
+kinerja usaha. 
+2.4 Lingkungan Operasi  
+Sistem ini dirancang berbasis web dan beroperasi pada lingkungan sebagai berikut: 
+● Platform: Aplikasi berbasis web menggunakan  browser modern (Google Chrome, 
+Mozilla Firefox, Microsoft Edge). 
+● Server: Apache atau Nginx dengan PHP ≥ 8.0 dan MySQL/MariaDB sebagai basis data. 
+● Client: PC atau laptop dengan koneksi internet dan resolusi layar minimal 1366x768. 
+● Sistem Operasi: Kompatibel dengan Windows, Linux, atau macOS. 
+● Komponen Pendukung: 
+○ Web server (XAMPP atau LAMP). 
+○ Browser dengan JavaScript aktif. 
+○ Framework CSS (TailwindCSS / Bootstrap). 
+2.5 Batasan Desain dan Implementasi  
+Beberapa batasan dalam desain dan implementasi sistem ini adalah: 
+1. Teknologi: Sistem dikembangkan menggunakan PHP Native dengan database MySQL 
+dan tampilan berbasis HTML, CSS, serta JavaScript. 
+2. Aksesibilitas: Sistem hanya dapat diakses oleh pengguna terdaftar melalui jaringan lokal 
+atau internet dengan login. 
+3. Keamanan: Menggunakan hashing untuk penyimpanan kata sandi (password_hash). 
+4. Performa: Sistem dirancang untuk menangani hingga ±1000 data pelanggan tanpa 
+penurunan performa signifikan. 
+5. Keterbatasan Hardware: Server minimal 2GB RAM dan 20GB storage. 
+ 
+ 
+6. Standar Pemrograman: Mengacu pada prinsip Clean Code  dan struktur Model -View-
+Controller (MVC) sederhana. 
+7. Regulasi: Tidak terhubung dengan sistem eksternal atau pembayaran online demi 
+menjaga privasi data pelanggan. 
+2.6 Dokumentasi Pengguna 
+Dokumentasi yang disediakan bersama sistem meliputi: 
+1. User Manual (PDF): Panduan penggunaan sistem, mulai dari login hingga pengelolaan 
+data dan pembuatan laporan. 
+2. Panduan Instalasi: Langkah -langkah instalasi sistem di server lokal menggunakan 
+XAMPP. 
+3. Online Help: Petunjuk singkat di dalam aplikasi pada tiap form untuk membantu 
+pengguna. 
+4. Video Tutorial: Penjelasan cara penggunaan fitur utama (opsional). 
+2.7 Business Concept Model 
+ 
+Gambar di atas menunjukkan Business Concept Model (BCM) dari Sistem Informasi Bengkel Motor 
+Fatia Kamal. Proses bisnis dimulai dari pelanggan yang datang untuk melakukan servis kendaraan. 
+Admin bengkel mencatat data pelanggan, kendaraan, serta transaksi ke dalam sistem. Mekanik 
+menerima informasi servis dari admin, kemudian melaporkan hasil pekerjaan dan keluhan pelanggan 
+yang telah ditangani. Admin juga mengelola stok suku cadang melalui database dan mencatat biaya 
+
+ 
+ 
+layanan. Selanjutnya, pemilik bengkel dapat melihat laporan transaksi serta laporan keuangan yang 
+dihasilkan oleh sistem sebagai dasar pengambilan keputusan. 
+3. Functional Requirement 
+Bagian ini menjelaskan seluruh kebutuhan fungsional dari Sistem Informasi Bengkel Motor 
+Fatia Kamal. Kebutuhan fungsional mencakup seluruh layanan utama dan fitur yang harus disediakan 
+sistem agar dapat mendukung kegiatan operasional bengkel, seperti penge lolaan data pelanggan, 
+servis, stok barang, transaksi, serta pembuatan laporan. Setiap kebutuhan diidentifikasi dengan ID 
+unik agar mudah dilacak selama proses pengembangan dan pengujian sistem. Daftar kebutuhan 
+fungsional disajikan pada tabel berikut: 
+ID Kebutuhan Fungsional Penjelasan 
+FR-01 Sistem harus menyediakan fitur login dan 
+logout pengguna. 
+Setiap pengguna (admin, kasir, 
+mekanik, pemilik) harus login 
+menggunakan username dan 
+password untuk mengakses sistem. 
+FR-02 Sistem harus dapat mencatat data pelanggan. Admin dapat menambah, mengubah, 
+dan menghapus data pelanggan 
+seperti nama, alamat, dan nomor 
+telepon. 
+FR-03 Sistem harus dapat mencatat data kendaraan 
+pelanggan. 
+Admin dapat menambahkan Data 
+kendaraan seperti jenis, nomor polisi, 
+dan tahun harus terhubung dengan 
+data pelanggan. 
+FR-04 Sistem harus dapat mencatat data servis 
+kendaraan. 
+Admin dan mekanik dapat 
+memasukkan jenis servis, tanggal 
+servis, dan biaya yang dikenakan. 
+FR-05 Sistem harus dapat mencatat data suku 
+cadang. 
+Admin dapat mengelola stok suku 
+cadang yang tersedia di bengkel. 
+FR-06 Sistem harus dapat mencatat transaksi 
+penjualan dan servis. 
+Kasir dapat membuat dan mencetak 
+nota transaksi pelanggan. 
+ 
+ 
+ID Kebutuhan Fungsional Penjelasan 
+FR-07 Sistem harus menampilkan laporan transaksi. Pemilik bengkel dapat melihat 
+laporan transaksi harian, mingguan, 
+dan bulanan. 
+FR-08 Sistem harus menampilkan laporan stok 
+barang. 
+Admin dapat memantau jumlah stok 
+barang yang tersisa dan barang yang 
+perlu dipesan ulang. 
+FR-09 Sistem harus menyediakan fitur pencarian 
+data. 
+Pengguna dapat mencari data 
+pelanggan, kendaraan, atau transaksi 
+berdasarkan kata kunci tertentu. 
+FR-10 Sistem harus menampilkan dashboard utama. Dashboard menampilkan ringkasan 
+data pelanggan, servis, stok barang, 
+dan transaksi terbaru. 
+FR-11 Sistem harus dapat mencetak laporan 
+transaksi dan stok barang. 
+Laporan dapat diekspor atau dicetak 
+dalam format PDF. 
+FR-12 Sistem harus menampilkan pesan konfirmasi 
+pada setiap tindakan penting. 
+Misalnya saat menghapus data, 
+sistem harus meminta konfirmasi dari 
+pengguna. 
+FR-13 Sistem harus dapat menampilkan data 
+kendaraan yang sudah terdaftar 
+Menampilkan seluruh data kendaraan 
+yang sudah terdaftar agar petugas 
+dapat melihat dan mengelola 
+informasi kendaraan dengan mudah. 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+3.1 Struktural 
+3.1.1 Data Flow Diagram Level 0 
+ 
+Diagram ini menggambarkan hubungan dan aliran data 8ar uke 8ni8em dengan entitas 
+eksternal yang terlibat, yaitu admin bengkel dan pemilik bengkel. Admin bengkel berperan sebagai 
+pengguna utama yang melakukan berbagai aktivitas operasional, seperti mencatat data sparepart 
+masuk dan keluar, data biaya servis, jenis motor pelanggan, status atau progres pengerjaan, keluhan 
+pelanggan, serta transaksi keuangan. Seluruh data tersebut dikirim ke sistem untuk diproses dan 
+disimpan di dalam database sparepart. Selanjutnya, sistem akan mengelola dan menghasilkan 
+berbagai laporan, s eperti laporan servis, laporan stok sparepart, dan laporan keuangan. Laporan -
+laporan tersebut kemudian dapat diakses oleh pemilik bengkel sebagai bahan evaluasi dan 
+pengambilan keputusan dalam pengelolaan usaha. Melalui aliran data ini, sistem membantu 
+memastikan bahwa setiap informasi operasional bengkel tercatat, tersimpan, dan dapat digunakan 
+secara efektif untuk mendukung kinerja bengkel secara keseluruhan. 
+
+ 
+ 
+3.1.2 Data Flow Diagram Level 1 
+DFD Level 1 ini menggambarkan rincian alur data pada sistem pengelolaan bengkel dengan 
+empat proses utama yang saling terhubung. Proses dimulai dari Admin yang memasukkan form data 
+service ke dalam proses 1.0 Kelola Data Service, yang bertugas mencatat dan memvalidasi informasi 
+service pelanggan. Dari proses ini, sistem menghasilkan data service pelanggan sekaligus 
+mengirimkan data permintaan sparepart  ke proses 2.0 Pengelolaan Sparepart. Proses pengelolaan 
+sparepart kemudian memeriksa ketersediaan stok, mengeluarkan sparepart yang diperlukan, serta 
+memperbarui data stok sparepart. Informasi tentang sparepart yang keluar dikirimkan kembali untuk 
+melengkapi data pada proses pembayaran. Selanjutnya, data service pelanggan dikirim ke proses 3.0 
+Kelola Pembayaran, yang bertugas menghitung biaya service, mencatat transaksi pembayaran, dan 
+menghasilkan data pembayaran. Data pembayaran tersebut menjadi salah satu sumber utama untuk 
+proses 4.0 Kelola Laporan, yang menggabungkan data pembayaran dan data service guna 
+menghasilkan laporan operasional bengkel. Laporan ini kemudian diterima oleh Owner sebagai pihak 
+yang membutuhkan informasi untuk pengawasan dan pengambilan keputusan. Secara keseluruhan, 
+
+ 
+ 
+DFD Level 1 ini menunjukkan integrasi antara pengelolaan service, stok sparepart, pembayaran, dan 
+pelaporan dalam satu alur sistem yang terstruktur dan saling terkait. 
+3.1.3 Logical Level 
+Logical Level pada sistem manajemen bengkel ini menggambarkan empat proses utama yang 
+saling terhubung dengan tiga data store serta satu aktor, yaitu Admin Bengkel. Pada proses 
+Pendaftaran Service, admin melakukan input data berupa keluhan pelanggan dan jenis motor, lalu 
+sistem menyimpannya sebagai data service baru ke dalam D1_Service. Selanjutnya, proses 
+Manajemen Inventaris mengelola seluruh aktivitas terkait stok sparepart, mulai dari memperbarui 
+data sparepart masuk dan keluar hingga menyediakan inform asi kebutuhan sparepart berdasarkan 
+jadwal service, yang kemudian disimpan dalam D2_Sparepart. Proses Servis dan Transaksi  
+menangani pengerjaan servis, pencatatan penggunaan sparepart, status pekerjaan, biaya, serta data 
+transaksi yang seluruhnya diperbarui ke dalam D3_Keuangan. Ketiga data store tersebut menjadi 
+sumber informasi utama bagi proses Pelaporan, yang menghasilkan laporan service, laporan stok, dan 
+laporan keuangan. Semua laporan ini kemudian diberikan kembali kepada Admin Bengkel sebagai 
+bahan evaluasi dan pengambilan keputusan. Logical level ini menunjukkan alur data yang terstruktur 
+dan hubungan antarproses yang mendukung operasional bengkel secara menyeluruh. 
+3.1.4 Physical Level 
+
+ 
+ 
+Physical Level pada 11ar uke 11ni menjelaskan bagaimana proses- proses dalam bengkel 
+dijalankan secara nyata, termasuk interaksi langsung antara admin, sistem, dan penyimpanan data. 
+Proses dimulai dari Input Data Service, di mana admin mengisi form pendaftaran service ke dalam 
+sistem. Data  ini kemudian disimpan sebagai data service 11ar uke  dalam D1_Service dan secara 
+otomatis diteruskan sebagai data service pelanggan ke proses berikutnya. Selanjutnya, proses Kelola 
+Stok Sparepart bekerja untuk mengubah data stok berdasarkan penggunaan sparepart selama service. 
+Sistem mengambil data stok lama dari D2_Sparepart, lalu memperbaruinya dan mengembalikan stok 
+terbaru ke data store tersebut. Proses ini juga mengirim informasi sparepart yang digunakan ke proses 
+pembayaran. Pada proses Pembayaran, sistem menerima data service pelanggan dan data sparep art 
+yang digunakan untuk menghitung total biaya dan mencatat transaksi. Data pembayaran yang telah 
+diproses disimpan ke dalam D3_Pembayaran sebagai data pembayaran baru. Seluruh informasi 
+mengenai pembayaran dan service kemudian digunakan oleh proses Buat Laporan, yang 
+menghasilkan laporan operasional bengkel. Laporan tersebut dikirimkan kepada Pemilik sebagai 
+bahan evaluasi dan pengambilan keputusan. Secara keseluruhan, physical level ini menggambarkan 
+implementasi nyata dari aliran data, pengolahan service, pengelolaan stok, transaksi pembayaran, dan 
+penyusunan laporan dalam operasi bengkel. 
+ 
+ 
+3.1.5 Data Dictionary 
+
+ 
+ 
+ 
+3.1.6 OO-DFD 
+
+ 
+ 
+OO-DFD ini menggambarkan aliran data pada sistem bengkel berbasis objek, di mana setiap 
+proses utama terhubung dengan class-class yang menangani data tertentu. Proses dimulai dari Admin 
+yang mengirimkan form data service ke proses 1.0 Kelola Data Service . Pada proses ini, sistem 
+menjalankan fungsi dari objek Transaksi  untuk membuat data service awal, yang kemudian 
+menghasilkan data service pelanggan serta data permintaan sparepart . Data permintaan tersebut 
+diteruskan ke proses 2.0 Pengelolaan Sparepart, yang berinteraksi langsung dengan objek Sparepart  
+untuk memeriksa stok, mengurangi sparepart yang digunakan, serta memperbarui jumlah stok melalui 
+metode seperti UpdateStok() dan editSparepart(). Output dari proses kedua berupa data sparepart keluar, 
+yang dikirim ke proses berikutnya. 
+Selanjutnya, data service pelanggan dan data sparepart keluar digunakan oleh proses 3.0 Kelola 
+Pembayaran, di mana objek Transaksi  dipanggil untuk menghitung total biaya melalui method 
+hitungTotal(), melakukan pencatatan sparepart yang digunakan, dan menyimpan transaksi 
+menggunakan simpanTransaksi(). Outputnya berupa data pembayaran, yang menjadi input bagi proses 
+4.0 Kelola Laporan. Pada tahap ini, sistem memanfaatkan objek Laporan Keuangan untuk 
+menghitung total pemasukan dan menghasilkan laporan menggunakan method buatLaporan(). Laporan 
+yang dihasilkan kemudian disampaikan kepada Owner, yang dapat meninjau laporan tersebut sebagai 
+bentuk evaluasi operasional bengkel. 
+Secara keseluruhan, OO-DFD ini menunjukkan interaksi terstruktur antara proses dan objek, di 
+mana setiap aliran data tidak hanya melewati proses fungsional tetapi juga berhubungan langsung 
+dengan class yang bertanggung jawab terhadap pengelolaan data. Diagram ini menegaskan 
+bagaimana konsep berorientasi objek diterapkan dalam aliran data, dengan setiap proses 
+memanfaatkan atribut dan metode yang ada dalam class untuk memastikan integritas data, alur kerja 
+yang jelas, serta konsistensi dalam pengolahan infor masi pada sistem bengkel. Jika kamu mau, aku 
+bisa buatkan versi ringkas atau versi sangat formal untuk dimasukkan ke laporan. 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+3.2 UML 
+3.2.1 Use Case Diagram 
+ 
+Deskripsi Use Case 
+` Aktor yang Terlibat: 
+1. Admin 
+● Bertanggung jawab dalam pengelolaan data utama bengkel. 
+● Melakukan input, update, dan pembuatan laporan operasional. 
+2. Owner (Pemilik Bengkel) 
+● Memantau hasil laporan dan kinerja operasional bengkel. 
+● Tidak melakukan input data, hanya melihat hasil analisis dan   laporan. 
+ 
+ 
+
+ 
+ 
+No. 
+Nama Use 
+Case 
+Aktor Deskripsi / Penjelasan 
+1. 
+Mengelola 
+Data 
+Customer 
+Admin 
+Admin dapat menambah, mengubah, dan menghapus data 
+pelanggan yang melakukan servis atau pembelian sparepart di 
+bengkel. Data ini mencakup nama, alamat, nomor telepon, dan 
+riwayat servis. 
+2. 
+Mengelola 
+Data 
+Kendaraan 
+Admin 
+Admin mencatat data kendaraan pelanggan seperti nomor polisi, 
+jenis kendaraan, merek, tahun pembuatan untuk memudahkan 
+identifikasi saat servis. dapat menambah kendaraan baru, 
+mengubah data kendaraan, menghapus data kendaraan, dan 
+menampilkan data kendaraan yang sudah terdaftar. 
+3. 
+Mengelola 
+Data 
+Mekanik 
+Admin 
+Admin mengatur dan memperbarui data mekanik yang bekerja di 
+bengkel, termasuk nama, keahlian, dan jadwal kerja. 
+4. 
+Mengelola 
+Stok 
+Sparepart 
+Admin 
+Admin mengelola stok suku cadang di gudang bengkel, termasuk 
+menambah barang baru, memperbarui jumlah stok, dan 
+menghapus barang yang tidak tersedia lagi. 
+5. 
+Melayani 
+Pembayaran 
+Admin 
+Setelah servis selesai, admin mencatat transaksi pembayaran 
+pelanggan, menghitung total biaya servis dan sparepart, serta 
+mencetak nota transaksi. 
+6. 
+Membuat 
+Laporan 
+Service 
+Admin 
+Admin menghasilkan laporan servis berdasarkan data servis yang 
+masuk setiap periode (harian, mingguan, bulanan) sebagai bahan 
+evaluasi kinerja bengkel. 
+7. 
+Membuat 
+Laporan 
+Keuangan 
+Admin 
+Admin membuat laporan keuangan berdasarkan seluruh transaksi 
+penjualan dan servis, yang nantinya akan digunakan oleh Owner 
+untuk memantau pendapatan dan pengeluaran bengkel. 
+8. 
+Melihat 
+Laporan 
+Service 
+Owner 
+Owner dapat melihat rekap laporan servis kendaraan untuk 
+mengetahui volume pekerjaan yang telah dilakukan oleh bengkel. 
+ 
+ 
+9. 
+Melihat 
+Laporan 
+Keuangan 
+Owner 
+Owner dapat memantau laporan keuangan untuk melihat 
+keuntungan, pengeluaran, dan performa finansial bengkel dalam 
+periode tertentu. 
+3.2.2 Skenario Use case 
+1. Use Case Scenario : Login 
+Brief Description User melakukan proses login untuk dapat mengakses fitur di 
+dalam sistem. 
+Primary Actor Admin, Owner 
+Supporting Actor - 
+Main Flow 1. User membuka sistem. 
+2. User memasukkan username dan password. 
+3. User menekan tombol Login. 
+4. Sistem memverifikasi username dan password. 
+5. Jika valid, sistem menampilkan halaman utama. 
+Alternative Flow Admin membatalkan proses login → sistem kembali ke halaman 
+awal. 
+Error Flow ● E1: Username atau password kosong → sistem menampilkan 
+pesan error. 
+● E2: Username atau password salah → sistem menampilkan 
+pesan error dan meminta admin mencoba kembali. 
+PreConditions User belum login. 
+PostConditions User berhasil login dan dapat mengakses fitur sistem. 
+2. Use Case Scenario : Mengelola Data Customer 
+Brief Description Admin dapat menambahkan, mengubah, dan menghapus data 
+customer. 
+Primary Actor Admin 
+Supporting Actor - 
+Main Flow 1. Admin login ke sistem. 
+2. Admin memilih menu Data Customer. 
+3. Sistem menampilkan daftar customer. 
+ 
+ 
+4. Admin dapat menambah, mengedit, atau menghapus data 
+customer. 
+5. Sistem menyimpan perubahan ke database. 
+Alternative Flow Admin membatalkan proses → sistem kembali ke menu utama. 
+Error Flow ● E1: Data tidak lengkap → sistem menampilkan pesan error. 
+● E2: Data gagal tersimpan → sistem menampilkan pesan 
+error. 
+PreConditions Admin sudah login. 
+PostConditions Data customer berhasil tersimpan/terupdate di database. 
+3. Use Case Scenario : Mengelola Data Kendaraan 
+Brief Description Admin mengelola data kendaraan, termasuk melihat data 
+kendaraan terdaftar, menambahkan kendaraan baru, 
+menambahkan data kendaraan lama dengan keluhan baru, 
+mengedit data kendaraan, dan menghapus data kendaraan. 
+Primary Actor Admin 
+Main Flow 1. Admin memilih menu Data Kendaraan. 
+2. Sistem menampilkan daftar kendaraan yang sudah terdaftar. 
+3. Admin dapat memilih salah satu aksi berikut:  
+ 3.1. Menambahkan Kendaraan Baru 
+● Admin memilih Tambah Kendaraan → Baru. 
+● Admin mengisi seluruh data kendaraan (nomor 
+polisi, jenis, merek, tahun, dll). 
+● Sistem melakukan validasi data. 
+● Jika valid, sistem menyimpan data kendaraan baru. 
+3.2. Menambahkan Data Kendaraan Lama (Keluhan Baru) 
+● Admin memilih Tambah Kendaraan → Data Lama. 
+● Sistem menampilkan daftar kendaraan lama yang 
+sudah terdaftar. 
+● Admin memilih salah satu kendaraan. 
+● Admin menginput keluhan baru, tanpa mengubah 
+data kendaraan lama. 
+ 
+ 
+● Sistem menyimpan keluhan sebagai data baru tetapi 
+tetap terhubung dengan kendaraan lama. 
+3.3. Mengedit Data Kendaraan 
+● Admin memilih kendaraan tertentu. 
+● Admin memperbarui data kendaraan (kecuali 
+keluhan). 
+● Sistem menyimpan perubahan ke database. 
+3.4. Menghapus Data Kendaraan 
+● Admin memilih kendaraan tertentu. 
+● Sistem meminta konfirmasi. 
+● Data kendaraan dihapus jika dikonfirmasi. 
+4. Sistem menyimpan seluruh perubahan ke database. 
+Alternative Flow Admin membatalkan proses → Sistem kembali ke menu utama. 
+Error Flow ● E1: Data kendaraan tidak lengkap → sistem menampilkan 
+pesan error. 
+● E2: Nomor polisi sudah terdaftar (duplikat) → sistem 
+menampilkan pesan bahwa nomor polisi tidak boleh sama. 
+● E3: Pemilihan kendaraan lama tidak valid → sistem 
+menampilkan pesan error. 
+● E4: Data gagal disimpan → sistem menampilkan pesan error.. 
+PreConditions ● Data kendaraan sudah tersimpan dalam sistem (minimal 
+beberapa data untuk pilihan kendaraan lama). 
+● Admin sudah login. 
+PostConditions ● Data kendaraan baru tersimpan. 
+● Keluhan baru pada kendaraan lama tersimpan sebagai entri 
+baru. 
+● Data kendaraan bisa terupdate jika diedit. 
+● Data kendaraan terhapus jika dipilih hapus. 
+4. Use Case Scenario : Mengelola Data Mekanik 
+Brief Description Admin mengelola data mekanik bengkel. 
+Primary Actor Admin 
+ 
+ 
+Main Flow 1. Admin memilih menu Data Mekanik. 
+2. Sistem menampilkan daftar mekanik. 
+3. Admin menambah, mengedit, atau menghapus data mekanik. 
+4. Sistem menyimpan perubahan ke database. 
+Alternative Flow Admin membatalkan → kembali ke menu. 
+Error Flow Data gagal tersimpan → tampil pesan error. 
+PreConditions Admin login. 
+PostConditions Data mekanik tersimpan/terupdate. 
+5. Use Case Scenario : Mengelola Stok Sparepart 
+Brief Description Admin menambah dan mengatur stok sparepart. 
+Primary Actor Admin 
+Main Flow 1. Admin membuka menu Stok Sparepart. 
+2. Sistem menampilkan daftar sparepart. 
+3. Admin menambah sparepart baru atau memperbarui stok. 
+4. Sistem menyimpan perubahan ke database. 
+Alternative Flow Admin membatalkan input → kembali ke menu. 
+Error Flow ● Data sparepart tidak lengkap. 
+● Data gagal disimpan. 
+PreConditions Sparepart sudah tercatat di database. 
+PostConditions Stok sparepart berhasil diperbarui. 
+6. Use Case Scenario : Melayani Pembayaran 
+Brief Description Admin melayani transaksi pembayaran service/sparepart. 
+Primary Actor Admin 
+Main Flow 1. Customer selesai melakukan service. 
+2. Admin membuka menu Pembayaran. 
+3. Admin menginput rincian biaya. 
+4. Sistem menghitung total pembayaran. 
+5. Admin mencetak bukti pembayaran. 
+Alternative Flow Admin memberi diskon/manual adjustment. 
+Error Flow Data transaksi tidak tersimpan. 
+ 
+ 
+PreConditions Service/sparepart sudah tercatat. 
+PostConditions Data pembayaran tercatat di sistem. 
+7. Use Case Scenario : Membuat Laporan Service 
+Brief Description Admin membuat laporan berkala tentang service. 
+Primary Actor Admin 
+Main Flow 1. Admin membuka menu Laporan Service. 
+2. Sistem menampilkan riwayat service. 
+3. Admin memilih periode laporan. 
+4. Sistem menghasilkan laporan. 
+Alternative Flow Admin memilih format laporan (PDF/Excel). 
+Error Flow Data service tidak tersedia → tampil pesan error. 
+PreConditions Data service tersedia di database. 
+PostConditions Laporan service tersimpan. 
+8. Use Case Scenario : Melihat Laporan Service 
+Brief Description Owner melihat laporan service. 
+Primary Actor Owner 
+Main Flow 1. Owner login ke sistem. 
+2. Owner memilih menu Laporan Service. 
+3. Sistem menampilkan laporan sesuai periode. 
+Alternative Flow Owner memilih filter laporan. 
+Error Flow Tidak ada data service → pesan error. 
+PreConditions Laporan sudah dibuat admin. 
+PostConditions Owner mengetahui riwayat service. 
+9. Use Case Scenario : Membuat Laporan Keuangan 
+Brief Description Admin membuat laporan keuangan berdasarkan transaksi. 
+Primary Actor Admin 
+Main Flow 1. Admin membuka menu Laporan Keuangan. 
+2. Sistem mengambil data transaksi. 
+3. Admin memilih periode laporan. 
+4. Sistem menghasilkan laporan. 
+ 
+ 
+Alternative Flow Admin memilih format laporan. 
+Error Flow Data transaksi tidak ada → pesan error. 
+PreConditions Data transaksi tersedia. 
+PostConditions Laporan keuangan tersimpan. 
+10. Use Case Scenario : Melihat Laporan Keuangan 
+Brief Description Owner melihat laporan keuangan bengkel. 
+Primary Actor Owner 
+Main Flow 1. Owner login. 
+2. Owner membuka menu Laporan Keuangan. 
+3. Sistem menampilkan laporan sesuai periode. 
+Alternative Flow Owner memilih filter laporan (harian, mingguan, tahunan). 
+ 
+Error Flow Laporan tidak tersedia. 
+PreConditions Admin sudah membuat laporan keuangan. 
+PostConditions Owner mengetahui kondisi keuangan bengkel. 
+11. Use Case Scenario : Logout 
+Brief Description Owner dapat keluar dari sistem untuk mengakhiri sesi 
+penggunaan. 
+Primary Actor Admin, Owner 
+Supporting Actor - 
+Main Flow 1. User berada pada halaman utama sistem. 
+2. User memilih tombol Logout. 
+3. Sistem meminta konfirmasi logout. 
+4. User menekan Ya/Confirm. 
+5. Sistem mengakhiri sesi dan menampilkan halaman login. 
+Alternative Flow User membatalkan konfirmasi logout → sistem tetap berada pada 
+halaman utama. 
+Error Flow Tidak ada error khusus untuk proses logout. 
+PreConditions User sudah login dan sedang berada dalam sesi aktif. 
+PostConditions Sesi berakhir dan sistem kembali ke halaman login. 
+ 
+ 
+ 
+ 
+3.2.3 Activity Diagram 
+1. Activity Diagram : Login 
+Activity Login menggambarkan proses ketika user memasukkan username dan password, lalu 
+sistem memvalidasi data tersebut. Jika valid, user diarahkan ke halaman utama, tetapi jika tidak 
+sesuai, sistem menampilkan pesan kesalahan dan meminta user mencoba kembali. 
+2. Activity Diagram : Mengelola Data Customer 
+
+ 
+ 
+Diagram ini menunjukkan alur admin dalam menambah, mengedit, menghapus, serta 
+menampilkan data customer, di mana sistem memproses setiap permintaan dan memperbarui 
+database sesuai aksi yang dilakukan. 
+3. Activity Diagram : Mengelola Data Kendaraan 
+
+ 
+ 
+Activity ini memvisualisasikan proses admin mengelola data kendaraan milik customer dengan 
+melakukan penambahan, pembaruan, atau penghapusan data, dan sistem menyimpan semua 
+perubahan tersebut dalam database. 
+4. Activity Diagram : Mengelola Data Mekanik 
+Diagram ini menjelaskan alur admin mengelola data mekanik, mulai dari memasukkan data baru, 
+mengubah data yang ada, hingga menghapus data yang tidak diperlukan, lalu sistem memperbarui 
+database mekanik secara otomatis. 
+ 
+ 
+ 
+ 
+ 
+ 
+
+ 
+ 
+5. Activity Diagram : Mengelola Stok Sparepart 
+Activity ini menunjukkan proses admin melakukan pengecekan, penambahan, serta pembaruan 
+stok sparepart, sementara sistem menampilkan stok terkini dan menyimpan perubahan yang 
+dilakukan. 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
+ 
+ 
+6. Activity Diagram : Melayani Pembayaran 
+Diagram ini memperlihatkan alur pembayaran ketika service selesai, di mana admin memasukkan 
+detail service dan biaya, sistem menghitung total, menerima pembayaran, dan mencatat transaksi ke 
+database. 
+ 
+ 
+ 
+ 
+ 
+ 
+
+ 
+ 
+7. Activity Diagram : Membuat Laporan Service 
+Activity ini menunjukkan bahwa admin memilih periode laporan, sistem mengambil data service 
+terkait, lalu mengolahnya menjadi laporan service yang dapat dilihat atau dicetak. 
+ 
+ 
+ 
+ 
+ 
+
+ 
+ 
+8. Activity Diagram : Melihat Laporan Service 
+Diagram ini menggambarkan proses user membuka menu laporan service, lalu sistem 
+menampilkan laporan yang sudah tersedia berdasarkan data yang pernah dibuat sebelumnya. 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
+ 
+ 
+9. Activity Diagram : Membuat Laporan Keuangan 
+Activity ini menjelaskan pembuatan laporan keuangan, di mana admin memilih rentang waktu 
+tertentu, kemudian sistem mengambil data transaksi dan menyusunnya menjadi laporan keuangan. 
+ 
+ 
+ 
+
+ 
+ 
+10. Activity Diagram : Melihat Laporan Keuangan 
+Diagram ini menunjukkan alur user atau pemilik membuka laporan keuangan yang telah dibuat, 
+dan sistem menampilkan informasi keuangan sesuai periode yang dipilih. 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
+ 
+ 
+11. Activity Diagram : Logout 
+Activity Logout menggambarkan saat user memilih tombol logout, sistem menghapus sesi aktif 
+dan mengarahkan kembali ke halaman login, menandakan proses keluar telah berhasil. 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
+ 
+ 
+3.2.4 Sequence Diagram 
+1. Sequence Diagram : Login 
+ 
+Sequence Login menunjukkan interaksi user dengan sistem ketika memasukkan kredensial, lalu 
+sistem melakukan validasi ke database, dan jika data benar, akses diberikan; jika salah, sistem 
+menolak dan menampilkan pesan error. 
+ 
+ 
+ 
+ 
+ 
+ 
+
+ 
+ 
+2. Sequence Diagram : Mengelola Data Customer 
+Diagram ini menggambarkan proses admin mengirim permintaan penambahan, perubahan, atau 
+penghapusan data customer kepada sistem, yang kemudian memvalidasi dan memperbarui database 
+sebelum menampilkan hasil ke admin. 
+ 
+ 
+ 
+ 
+ 
+ 
+
+ 
+ 
+3. Sequence Diagram : Mengelola Data Kendaraan 
+Sequence ini memperlihatkan interaksi ketika admin mengelola data kendaraan, mulai dari 
+mengirim data ke sistem, sistem memvalidasi, lalu database diperbarui, dan hasilnya dikembalikan 
+kepada admin. 
+
+ 
+ 
+4. Sequence Diagram : Mengelola Data Mekanik 
+Diagram ini menunjukkan alur ketika admin melakukan operasi CRUD (Create, Read, Update, 
+Delete) pada data mekanik, dan sistem mengeksekusi permintaan tersebut dengan menyimpan 
+perubahan ke database. 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
+ 
+ 
+5. Sequence Diagram : Mengelola Stok Sparepart 
+Sequence ini menjelaskan bagaimana admin meminta data stok, sistem menampilkan stok terkini, 
+admin melakukan pembaruan, dan sistem memperbarui database sekaligus memberikan konfirmasi 
+perubahan. 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
+ 
+ 
+6. Sequence Diagram : Melayani Pembayaran 
+Diagram ini menunjukkan alur ketika admin memasukkan data service selesai, sistem menghitung 
+biaya, admin mengonfirmasi pembayaran, dan sistem menyimpan transaksi pembayaran ke database. 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
+ 
+ 
+7. Sequence Diagram : Membuat Laporan Service 
+Sequence ini menggambarkan admin memilih periode laporan, lalu sistem mengambil data 
+service dari database, mengolahnya, dan menghasilkan laporan yang dapat dibuka atau dicetak. 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
+ 
+ 
+8. Sequence Diagram : Melihat Laporan Service 
+ 
+Diagram ini menampilkan proses user meminta laporan service yang sudah ada, kemudian sistem 
+mengambil laporan dari database dan menampilkannya kepada user. 
+ 
+ 
+ 
+ 
+ 
+
+ 
+ 
+9. Sequence Diagram : Membuat Laporan Keuangan 
+ 
+Sequence ini memperlihatkan bahwa admin menentukan periode laporan keuangan, sistem 
+mengambil data transaksi dari database, kemudian mengolahnya dan menyusun laporan keuangan. 
+
+ 
+ 
+10. Sequence Diagram : Melihat Laporan Keuangan 
+ 
+Diagram ini menjelaskan bagaimana user meminta laporan keuangan, sistem mengambil data dari 
+database, dan menampilkan laporan sesuai periode yang diminta. 
+11. Sequence Diagram : Logout 
+Sequence Logout menggambarkan ketika user memilih menu logout, sistem menghapus sesi yang 
+tersimpan di server dan mengembalikan user ke halaman login. 
+
+ 
+ 
+3.2.5 Class Diagram 
+ 
+Class Diagram pada sistem informasi bengkel ini menggambarkan hubungan antar bagian 
+utama yang berperan dalam proses operasional, mulai dari transaksi service, pengelolaan sparepart, 
+hingga pembuatan laporan. Diagram ini terdiri dari lima kelas utama, yaitu Admin, Transaksi, 
+Sparepart, Laporan Keuangan, dan Owner , yang masing -masing memiliki atribut serta fungsi 
+(method) sesuai perannya. Kelas Admin  mewakili pengguna sistem dengan hak akses untuk 
+melakukan login, mengelola transaksi, memperbarui stok sparepart, serta melihat data transaksi. 
+Admin menjadi pusat aktivitas karena setiap proses operasional bengkel dilakukan oleh admin yang 
+tercatat dalam sistem. Kelas Transaksi berisi data terkait pelayanan service, seperti tanggal transaksi, 
+nama pelanggan, jenis motor, total biaya, status, hingga catatan keluhan. Kelas ini memiliki hubungan 
+langsung dengan Admin dan Sparepart karena transaksi service dapat melibatkan perubahan stok 
+
+ 
+ 
+sparepart dan dicatat oleh admin. Selain itu, setiap transaksi juga berkontribusi terhadap laporan 
+keuangan yang tercatat pada kelas Laporan Keuangan. 
+Kelas Sparepart menyimpan informasi terkait barang yang digunakan dalam proses service, 
+seperti nama sparepart, harga beli, harga jual, dan jumlah stok. Relasinya dengan kelas Transaksi 
+menunjukkan bahwa setiap service dapat mengurangi stok sparepart, sehingga kedua kelas ini saling 
+memengaruhi. Kelas Laporan Keuangan bertugas mencatat pemasukan dan pengeluaran berdasarkan 
+transaksi yang terjadi. Setiap transaksi yang tersimpan akan berhubungan dengan laporan keuangan 
+untuk menghasilkan total pendapatan dan total biaya operasional. Laporan ini kemudian dapat diakses 
+oleh kelas Owner, yang berperan sebagai pemilik bengkel. Kelas Owner memiliki kemampuan untuk 
+login dan melihat laporan keuangan maupun laporan transaksi yang dibuat sistem, namun tidak dapat 
+mengubah data operasional lainnya. 
+Secara keseluruhan, Class Diagram ini menunjukkan bagaimana data transaksi, sparepart, dan 
+laporan saling terhubung melalui peran admin sebagai pengelola utama. Struktur hubungan antar 
+kelas dirancang agar sistem dapat berjalan secara terintegrasi, sehingg a memudahkan proses 
+pencatatan transaksi, monitoring stok sparepart, serta penyusunan laporan keuangan yang dibutuhkan 
+oleh pemilik bengkel. 
+3.2.6 Entity Relationship Diagram ERD 
+ERD ini menggambarkan sistem informasi bengkel motor yang melibatkan beberapa  entitas 
+utama seperti Transaksi, Admin, Owner, Sparepart, dan Laporan Keuangan. Tujuannya adalah untuk 
+mengelola proses bisnis bengkel mulai dari pencatatan transaksi, pengelolaan data sparepart, hingga 
+pembuatan dan pengawasan laporan keuangan. 
+ 
+ 
+ 
+Entity Relationship Diagram (ERD) merupakan model konseptual yang digunakan untuk 
+menggambarkan hubungan antar entitas (tabel) dalam sebuah sistem basis data. ERD membantu 
+perancang sistem memahami struktur data serta interaksi antar komponen yang ada di d alam sistem. 
+Dalam konteks Sistem Informasi Bengkel Motor Fatia Kamal, ERD digunakan untuk memetakan data 
+utama yang dibutuhkan dalam pengelolaan operasional bengkel agar informasi dapat tersimpan 
+dengan baik, saling terhubung, dan mudah diolah. 
+Pada ERD di atas, terdapat beberapa entitas utama, yaitu Admin, Owner, Transaksi, Laporan 
+Keuangan, dan Sparepart. Entitas Admin memiliki peran penting dalam sistem karena bertugas untuk 
+mencatat data transaksi pelanggan, mengelola data sparepart, dan membuat laporan keuangan. Setiap 
+transaksi yang dilakukan pelanggan, seperti servis atau pembelian suku cadang, akan dicatat oleh 
+admin ke dalam entitas Transaksi, yang berisi informasi seperti tanggal transaksi, nama pelanggan, 
+jenis motor, total biaya, status, dan catatan keluhan. 
+Selanjutnya, entitas Laporan Keuangan menampung hasil pengolahan data transaksi yang 
+dibuat oleh admin. Laporan ini berisi tanggal laporan, total uang masuk, dan uang keluar, yang 
+
+ 
+ 
+menjadi dasar pemantauan keuangan bengkel. Entitas Owner memiliki hubungan langsung dengan 
+laporan keuangan dan transaksi, karena pemilik bengkel berperan dalam mengawasi seluruh aktivitas 
+keuangan dan melihat laporan yang dihasilkan oleh sistem. 
+Selain itu, entitas Sparepart menyimpan data terkait stok, harga beli, dan harga jual suku 
+cadang. Admin bertanggung jawab untuk mengelola entitas ini agar ketersediaan barang selalu 
+tercatat dengan akurat. Hubungan antar entitas pada ERD ini menunjukkan keterkaitan fungsional 
+antara kegiatan operasional bengkel dengan sistem informasi yang dibangun. Dengan adanya model 
+data seperti ini, sistem dapat membantu pengelolaan bengkel menjadi lebih efisien, terstruktur, dan 
+meminimalisir kesalahan pencatatan manual. 
+4. Kebutuhan Antarmuka Eksternal 
+4.1 Prototype 
+4.1.1 Tampilan Login 
+1. Deskripsi Tampilan 
+Ini adalah Halaman Login Sistem Bengkel Fatia. Terdiri dari sambutan di sisi kiri dan 
+formulir login (Username, Password, Tombol Masuk) di sisi kanan. 
+2. Alur Tampilan 
+• Pengguna mengisi kolom Username dan Password. 
+• Pengguna menekan tombol hijau "MASUK". 
+• Tampilan yang Muncul: 
+o Jika Berhasil: Pengguna akan langsung diarahkan ke Halaman Utama 
+(Dashboard) sistem. 
+o Jika Gagal: Pengguna akan tetap berada di halaman ini, dan akan muncul Pesan 
+Kesalahan (misalnya, di bawah tombol Masuk atau di atas kolom isian). 
+4.1.2 Tampilan Loading 
+1. Deskripsi Singkat 
+Ini adalah Halaman Loading (Memuat) yang muncul setelah tombol "MASUK" pada 
+halaman login Sistem Bengkel Fatia ditekan. 
+• Tampilan login sebelumnya (Selamat Datang... dan formulir) terlihat kabur (blur) di 
+latar belakang. 
+• Sebuah Indikator Loading (lingkaran yang sedang mengisi) berwarna hijau cerah 
+berada di tengah, menutupi sebagian besar layar. 
+ 
+ 
+2. Alur Tampilan 
+• Pengguna menekan tombol "MASUK" pada halaman sebelumnya. 
+• Tampilan ini (halaman loading ) muncul, menunjukkan bahwa sistem sedang 
+memproses dan memverifikasi data yang dimasukkan. 
+• Tampilan Selanjutnya yang Muncul: 
+o Jika Verifikasi Berhasil: Setelah loading selesai, pengguna akan diarahkan ke 
+Halaman Utama (Dashboard) sistem. 
+o Jika Verifikasi Gagal: Setelah loading selesai, tampilan akan kembali ke 
+Halaman Login sebelumnya, dan akan muncul Pesan Kesalahan (misalnya, 
+Username atau Password salah). 
+4.1.3 Tampilan Dashboard Owner 
+1. Deskripsi Singkat 
+Ini adalah Dashboard Owner (Pemilik) dari Sistem Bengkel Fatia. 
+• Bagian kiri menampilkan ilustrasi seorang mekanik memegang kunci inggris dan tas 
+peralatan. 
+• Bagian kanan adalah menu navigasi utama untuk Owner. 
+2. Alur Tampilan 
+Tampilan ini muncul setelah proses loading (pada gambar kedua) berhasil diverifikasi. 
+Fungsinya adalah sebagai pusat kontrol utama: 
+• Dashboard Owner: Pengguna berada di menu utama Owner. 
+• Pilihan Menu Utama: Owner dapat memilih: 
+o Tombol "Laporan Service" 
+o Tombol "Laporan Keuangan" 
+o Tombol "Mengelola Stok" 
+• Keluar (Logout): Owner dapat menekan tombol "KELUAR" di pojok kanan bawah. 
+• Tampilan Selanjutnya yang Muncul (Jika KELUAR ditekan): 
+o Pengguna akan diarahkan kembali ke Halaman Login awal (yang menampilkan 
+form Username dan Password). 
+4.1.4 Tampilan Filter Laporan Service 
+1. Deskripsi Singkat 
+ 
+ 
+Ini adalah tampilan Laporan Bulanan (kemungkinan Laporan Service atau Laporan 
+Keuangan) dalam Dashboard Owner Sistem Bengkel Fatia. 
+• Kolom menu utama Owner (Laporan Service, Laporan Keuangan, Mengelola Stok, 
+KELUAR) masih terlihat di sisi kanan. 
+• Sisi kiri kini menampilkan tabel yang berisi data berdasarkan bulan (Mei hingga 
+November). 
+2. Alur Tampilan 
+Tampilan ini muncul setelah Owner menekan salah satu tombol laporan di Dashboard 
+(seperti Laporan Service atau Laporan Keuangan). 
+• Aksi di Tabel: Owner dapat melihat daftar laporan bulanan dan menekan tombol 
+"PRINT" di kolom Aksi. 
+• Tampilan yang Muncul (Jika PRINT ditekan): Kemungkinan akan muncul jendela 
+pop-up atau halaman baru yang menampilkan detail laporan bulan tersebut dalam 
+format siap cetak. 
+• Tampilan yang Muncul (Jika KELUAR ditekan): Pengguna akan diarahkan kembali 
+ke Halaman Login awal. 
+4.1.5  Tampilan Filter Laporan Keuangan 
+1. Deskripsi Singkat 
+Ini adalah tampilan Laporan Bulanan Sistem Bengkel Fatia. Di sisi kiri terdapat tabel data 
+bulanan (Mei hingga November) dengan tombol PRINT di kolom Aksi. Di sisi kanan 
+terdapat menu DASHBOARD OWNER (Laporan Service, Laporan Keuangan, 
+Mengelola Stok, KELUAR). 
+2. Alur Tampilan 
+• Aksi di Tabel: Pengguna dapat menekan tombol PRINT di samping bulan yang 
+diinginkan. 
+• Tampilan yang Muncul: Akan muncul jendela atau halaman baru yang menampilkan 
+detail laporan bulan tersebut dalam format siap cetak. 
+• Aksi Menu: Pengguna dapat menekan tombol menu lain (misalnya Mengelola Stok) 
+untuk pindah ke tampilan lain. 
+• Aksi Keluar: Menekan tombol KELUAR akan mengarahkan pengguna kembali ke 
+Halaman Login awal. 
+ 
+ 
+4.1.6  Tampilan Kelola Stok Sparepart Owner 
+1. Deskripsi Singkat 
+Ini adalah tampilan Data Sparepart (Mengelola Stok) Sistem Bengkel Fatia. Di sisi kiri 
+terdapat tabel data sparepart  (Spion, Velg, Aki, dll.) lengkap dengan Stok, kolom Edit 
+(ikon pensil) dan tombol DELETE. Terdapat juga tombol CREATE LAPORAN dan 
+CREATE DATA +. Di sisi kanan terdapat menu Owner yang berubah judul menjadi Data 
+Sparepart di bagian atas, namun tombol menu tetap sama (Laporan Service, Laporan 
+Keuangan, Mengelola Stok) dan tombol Back. 
+2. Alur Tampilan  
+Tampilan ini muncul ketika Owner menekan tombol Mengelola Stok dari Dashboard. 
+• Aksi Pengelolaan Data: Owner dapat: 
+o Menekan ikon Edit (pensil) untuk mengubah data sparepart. 
+o Menekan tombol DELETE untuk menghapus data. 
+o Menekan tombol CREATE DATA + untuk menambahkan sparepart baru. 
+o Menekan tombol CREATE LAPORAN untuk membuat laporan stok. 
+• Tampilan yang Muncul (Jika DELETE/EDIT/CREATE DATA ditekan): 
+Kemungkinan akan muncul jendela pop- up (modal) untuk konfirmasi atau formulir 
+input/edit data. 
+• Aksi Kembali: Menekan tombol Back akan mengarahkan pengguna kembali ke 
+Dashboard Owner (gambar mekanik). 
+• Aksi Menu Cepat: Menekan Laporan Service atau Laporan Keuangan akan langsung 
+membawa ke Tampilan Laporan Bulanan tanpa harus kembali ke Dashboard terlebih 
+dahulu. 
+4.1.7 Tampilan Dashboard Admin 
+1. Deskripsi Singkat 
+Ini adalah Dashboard Admin Sistem Bengkel Fatia. Di sisi kiri terdapat ilustrasi mekanik 
+yang tersenyum. Sisi kanan adalah menu navigasi utama untuk Admin, yaitu: Data 
+Pelanggan, Data Mekanik, Data Sparepart, Data Kendaraan, dan Pembayaran. Terdapat 
+tombol KELUAR di bawah. 
+2. Alur Tampilan 
+ 
+ 
+Tampilan ini muncul setelah login Admin berhasil. Fungsinya adalah sebagai pusat 
+pengelolaan data operasional: 
+• Aksi Menu: Admin dapat menekan salah satu tombol menu (Data Pelanggan, Data 
+Mekanik, Data Sparepart, Data Kendaraan, Pembayaran) untuk menuju ke halaman 
+pengelolaan data yang spesifik. 
+• Tampilan yang Muncul (Jika Tombol Data ditekan): Akan muncul halaman/tampilan 
+tabel yang berisi data yang relevan dengan tombol yang ditekan (misalnya, tabel data 
+pelanggan jika Data Pelanggan ditekan). 
+• Aksi Keluar: Menekan tombol KELUAR akan mengarahkan Admin kembali ke 
+Halaman Login awal. 
+ 
+ 
+4.1.8  Tampilan Data Pelanggan 
+1. Deskripsi Singkat 
+Tampilan ini adalah halaman "Data Pelanggan" dari sebuah aplikasi (kemungkinan sistem 
+manajemen bengkel atau sejenisnya). 
+• Sisi Kiri: Menampilkan tabel daftar pelanggan dengan kolom No, Nama, dan Aksi. 
+Aksi yang tersedia adalah ikon edit dan tombol DELETE. Di bagian bawah terdapat 
+tombol CREATE LAPORAN dan CREATE DATA +. 
+• Sisi Kanan: Menampilkan menu utama aplikasi yang berfokus pada data dan 
+transaksi, dengan judul Data Pelanggan di bagian atas. 
+2. Alur Tampilan 
+Halaman "Data Pelanggan" yang menampilkan daftar nama pelanggan dalam tabel. 
+• Alur Utama (Navigasi Menu di Kanan): 
+o Menekan tombol menu (seperti Data Mekanik, Data Sparepart, Data Kendaraan, 
+Pembayaran) akan menampilkan halaman data/transaksi yang sesuai. 
+o Menekan tombol Back akan kembali ke menu sebelumnya (Dashboard/Home). 
+• Alur Pengelolaan Data (Tabel Kiri): 
+o Edit (ikon pensil): Membuka formulir untuk mengubah data pelanggan. 
+o DELETE: Memunculkan konfirmasi hapus data. 
+ 
+ 
+o CREATE DATA +: Membuka formulir untuk menambahkan data pelanggan 
+baru. 
+o CREATE LAPORAN: Membuat dan menampilkan laporan daftar pelanggan. 
+4.1.9  Data Mekanik 
+1. Deskripsi Singkat 
+Tampilan ini adalah halaman "Data Mekanik" dari sebuah aplikasi. 
+• Sisi Kiri: Menampilkan tabel daftar mekanik (No, Nama, Aksi) dengan opsi Edit 
+(ikon pensil) dan tombol DELETE untuk setiap mekanik. Di bagian bawah terdapat 
+tombol LOGOUT dan CREATE DATA +. 
+• Sisi Kanan: Menu navigasi utama aplikasi dengan judul Data Mekanik di bagian atas. 
+2. Alur Tampilan 
+• Aksi Pengelolaan Data: Pengguna dapat Edit data mekanik (pensil), DELETE data, 
+atau menekan CREATE DATA + untuk menambah data baru. 
+o Tampilan Muncul: Aksi ini memunculkan konfirmasi pop -up (untuk DELETE) 
+atau Formulir Input/Edit (untuk Edit/Create Data). 
+• Aksi Navigasi Cepat: Menu di sisi kanan (Data Pelanggan, Data Sparepart, Data 
+Kendaraan, Pembayaran) akan langsung membawa pengguna ke Tampilan Daftar 
+Data yang sesuai. 
+• Aksi Keluar: Tombol KELUAR dan LOGOUT akan mengarahkan pengguna ke 
+Tampilan Login atau Dashboard. 
+4.1.10 Data Sparepart 
+1. Deskripsi Singkat 
+Tampilan ini adalah halaman "Data Sparepart" untuk mengelola inventaris stok barang. 
+• Sisi Kiri: Menampilkan tabel daftar sparepart (No, Nama, Stok, Aksi). Aksi yang 
+tersedia adalah ikon edit  (pensil) dan tombol DELETE. Di bagian bawah terdapat 
+tombol CREATE LAPORAN dan CREATE DATA +. 
+• Sisi Kanan: Menampilkan menu navigasi utama aplikasi dengan judul Data Sparepart 
+di bagian atas. 
+2. Alur Tampilan 
+• Aksi Navigasi Cepat (Menu Kanan) 
+ 
+ 
+o Data Pelanggan, Data Mekanik, Data Kendaraan, Pembayaran: Menekan salah 
+satu tombol ini akan langsung membawa ke Tampilan Daftar Data/Transaksi yang 
+sesuai dengan nama tombol. 
+o Back: Kembali ke Tampilan Menu Utama sebelumnya (misalnya Dashboard). 
+• Aksi Pengelolaan Data (Tabel Kiri) 
+o Edit (ikon pensil): Membuka Formulir Edit Data Sparepart untuk sparepart  yang 
+dipilih. 
+o DELETE: Memunculkan konfirmasi pop-up untuk menghapus data. 
+o CREATE DATA +: Membuka Formulir Tambah Data Sparepart baru. 
+o CREATE LAPORAN: Menampilkan Laporan Data Sparepart (Stok). 
+4.1.11  Tampilan Data Kendaraan 
+1. Deskripsi Singkat 
+Tampilan ini adalah halaman "Data Kendaraan" yang berfungsi untuk mengelola data  
+jenis atau model kendaraan yang dilayani. 
+• Sisi Kiri: Menampilkan tabel daftar kendaraan (No, Nama, Aksi). Aksi yang tersedia 
+adalah ikon edit (pensil) dan tombol DELETE. Di bagian bawah terdapat tombol 
+CREATE LAPORAN dan CREATE DATA +. 
+• Sisi Kanan: Menampilkan menu navigasi utama aplikasi dengan judul Data 
+Kendaraan di bagian atas. 
+2. Alur Tampilan 
+• Aksi Navigasi Cepat (Menu Kanan) 
+o Data Pelanggan, Data Mekanik, Data Sparepart, Pembayaran: Menekan salah 
+satu tombol ini akan langsung membawa ke Tampilan Daftar Data/Transaksi 
+yang sesuai dengan nama tombol. 
+o Back: Kembali ke Tampilan Menu Utama sebelumnya (misalnya Dashboard). 
+• Aksi Pengelolaan Data (Tabel Kiri) 
+o Edit (ikon pensil): Membuka Formulir Edit Data Kendaraan untuk kendaraan 
+yang dipilih. 
+o DELETE: Memunculkan konfirmasi pop-up untuk menghapus data. 
+o CREATE DATA +: Membuka Formulir Tambah Data Kendaraan baru. 
+o CREATE LAPORAN: Menampilkan Laporan Data Kendaraan. 
+ 
+ 
+4.1.12 Tampilan Pembayaran 
+1. Deskripsi Singkat 
+Tampilan ini adalah halaman "Pembayaran" yang menampilkan daftar transaksi atau 
+riwayat pembayaran. 
+• Sisi Kiri: Menampilkan tabel daftar pembayaran dengan kolom No, Nama, 
+Sparepart, dan Harga. Di bagian bawah terdapat tombol LOGOUT dan CREATE 
+DATA +. 
+• Sisi Kanan: Menampilkan menu navigasi utama aplikasi dengan judul Pembayaran 
+di bagian atas. 
+2. Alur Tampilan 
+• Aksi Navigasi Cepat (Menu Kanan) 
+o Data Pelanggan, Data Mekanik, Data Sparepart, Data Kendaraan: Menekan salah 
+satu tombol ini akan langsung membawa ke Tampilan Daftar Data yang sesuai 
+dengan nama tombol. 
+o KELUAR: Kembali ke Tampilan Menu Utama sebelumnya atau Tampilan 
+Login. 
+• Aksi Pengelolaan Data (Tabel Kiri) 
+o CREATE DATA +: Membuka Formulir Tambah Data Pembayaran/Transaksi 
+baru. 
+o LOGOUT: Kembali ke Tampilan Login aplikasi. 
+4.1.13 Tampilan Konfirmasi Pembayaran 
+1. Deskripsi Singkat 
+Tampilan ini adalah layar Pembayaran dari sebuah aplikasi (kemungkinan kasir atau 
+bengkel) yang menampilkan daftar item/transaksi di kiri dan menu/opsi pembayaran di 
+kanan. Fokus utama adalah pop-up Konfirmasi Pembayaran yang muncul di tengah layar. 
+2. Alur Tampilan 
+• Pemicu: Pengguna menekan tombol "Pembayaran" (atau sejenisnya) di layar utama. 
+• Tampil Pop-up: Muncul pop-up Konfirmasi Pembayaran dengan pilihan "Ya" dan 
+"Batal". 
+• Menekan Ya : Proses pembayaran dilanjutkan (misalnya, ke tahap proses server atau 
+tampilan struk/sukses). 
+ 
+ 
+• Menekan Batal : Kembali ke layar Pembayaran (layar utama di belakang pop-up). 
+4.1.14 Tampilan Form Tambah Kendaraan 
+1. Deskripsi Singkat 
+Tampilan ini adalah halaman formulir "TAMBAH DATA KENDARAAN BARU". 
+Halaman ini memiliki ilustrasi transfer data di sebelah kiri dan formulir input data di 
+sebelah kanan, dengan skema warna gelap/biru tua dan aksen hijau neon. Formulir terdiri 
+dari input untuk Nama, Nama Kendaraan, No Plat, dan Keluhan. 
+2. Alur Tampilan 
+• Tujuan: Pengguna bertujuan untuk menyimpan data kendaraan baru ke sistem. 
+• Aksi: Pengguna mengisi semua kolom formulir. 
+• Menekan SUBMIT :  Data kendaraan dikirim untuk disimpan (misalnya, ke tahap 
+proses server atau menampilkan notifikasi data berhasil disimpan). 
+• Menekan BACK : Pengguna kembali ke tampilan atau halaman sebelumnya 
+(kemungkinan ke daftar data kendaraan atau menu utama). 
+4.1.15  Tampilan Form Edit Kendaraan 
+1. Deskripsi Singkat 
+Tampilan ini adalah halaman formulir "EDIT DATA KENDARAAN". Mirip dengan 
+tampilan "Tambah Data", halaman ini memiliki ilustrasi transfer data di sebelah kiri dan 
+formulir input di sebelah kanan. Formulir menampilkan data yang sudah ada (CECE 
+DINI, BEAT, W 1234 GF, BREBET) dan memungkinkan pengguna untuk mengedit 
+nilai-nilai tersebut. 
+2. Alur Tampilan 
+• Tujuan: Pengguna bertujuan untuk memodifikasi dan menyimpan perubahan pada 
+data kendaraan yang sudah ada. 
+• Aksi: Pengguna mengubah nilai di kolom formulir (Nama, Nama Kendaraan, No 
+Plat, Keluhan). 
+• Menekan SUBMIT :  Data kendaraan yang telah diedit dikirim untuk diperbarui 
+(misalnya, ke tahap proses server atau menampilkan notifikasi data berhasil diubah). 
+• Menekan BACK :  Pengguna kembali ke tampilan atau halaman sebelumnya 
+(kemungkinan ke daftar data kendaraan). 
+4.1.16 Tampilan Form Tambah Pelanggan 
+ 
+ 
+1. Deskripsi Singkat 
+Tampilan ini adalah halaman formulir "TAMBAH DATA PELANGGAN". Halaman ini 
+didominasi warna gelap/biru tua dan aksen hijau neon, dengan ilustrasi transfer data di 
+sebelah kiri dan formulir input di sebelah kanan. Formulir ini meminta input untuk Nama, 
+Alamat, No Telp, dan Jenis Kelamin. 
+2. Alur Tampilan 
+• Tujuan: Pengguna bertujuan untuk menyimpan data pelanggan baru ke sistem. 
+• Aksi: Pengguna mengisi semua kolom formulir yang diperlukan. 
+• Menekan SUBMIT :  Data pelanggan dikirim untuk disimpan (misalnya, ke tahap 
+proses server atau menampilkan notifikasi data berhasil disimpan). 
+• Menekan BACK :  Pengguna kembali ke tampilan atau halaman sebelumnya 
+(kemungkinan ke daftar data pelanggan atau menu utama). 
+ 
+ 
+4.1.17 Tampilan Form Edit Pelanggan 
+1. Deskripsi Singkat 
+Tampilan ini adalah halaman formulir "EDIT DATA PELANGGAN". Halaman ini 
+didominasi warna gelap/biru tua dan aksen hijau neon, dengan ilustrasi transfer data di 
+sebelah kiri. Formulir di sebelah kanan menampilkan dan memungkinkan pengeditan data 
+pelanggan yang sudah ada: CECE DINI (Nama), TELANG (Alamat), 122645364563 (No 
+Telp), dan WANITA (Jenis Kelamin). 
+2. Alur Tampilan 
+• Tujuan: Pengguna bertujuan untuk memodifikasi dan menyimpan perubahan pada 
+data pelanggan yang sudah ada. 
+• Aksi: Pengguna mengubah nilai di kolom formulir (Nama, Alamat, No Telp, atau 
+Jenis Kelamin). 
+• Menekan SUBMIT :  Data pelanggan yang telah diedit dikirim untuk diperbarui 
+(misalnya, ke tahap proses server atau menampilkan notifikasi data berhasil diubah). 
+• Menekan BACK :  Pengguna kembali ke tampilan atau halaman sebelumnya 
+(kemungkinan ke daftar data pelanggan). 
+4.1.18  Tampilan Form Tambah Sparepart 
+ 
+ 
+1. Deskripsi Singkat 
+Tampilan ini adalah halaman formulir "TAMBAH DATA SPAREPART". Halaman ini 
+memiliki skema warna gelap/biru tua dan aksen hijau neon, dengan ilustrasi transfer data 
+di sebelah kiri dan formulir input di sebelah kanan. Formulir ini meminta input untuk 
+Nama, Stok, dan Harga sparepart. 
+2. Alur Tampilan 
+• Tujuan: Pengguna bertujuan untuk menyimpan data sparepart baru ke dalam sistem 
+inventaris. 
+• Aksi: Pengguna mengisi semua kolom formulir yang diperlukan. 
+• Menekan SUBMIT :  Data sparepart dikirim untuk disimpan (misalnya, ke tahap 
+proses server atau menampilkan notifikasi data berhasil disimpan). 
+• Menekan BACK :  Pengguna kembali ke tampilan atau halaman sebelumnya 
+(kemungkinan ke daftar data sparepart atau menu utama). 
+ 
+4.1.19  Tampilan Form Edit Sparepart 
+1. Deskripsi Singkat 
+Tampilan ini adalah halaman formulir "EDIT DATA SPAREPART". Halaman ini 
+didominasi warna gelap/biru tua dan aksen hijau neon, dengan ilustrasi transfer data di 
+sebelah kiri. Formulir di sebelah kanan menampilkan dan memungkinkan pengeditan data 
+sparepart yang sudah ada: SPION (Nama), 50 (Stok), dan 23.000 (Harga). 
+2. Alur Tampilan 
+• Tujuan: Pengguna bertujuan untuk memodifikasi dan menyimpan perubahan pada 
+data sparepart yang sudah ada. 
+• Aksi: Pengguna mengubah nilai di kolom formulir (Nama, Stok, atau Harga). 
+• Menekan SUBMIT : Data sparepart yang telah diedit dikirim untuk diperbarui 
+(misalnya, ke tahap proses server atau menampilkan notifikasi data berhasil diubah). 
+• Menekan BACK :  Pengguna kembali ke tampilan atau halaman sebelumnya 
+(kemungkinan ke daftar data sparepart). 
+4.1.20 Tampilan Form Tambah Mekanik 
+1. Deskripsi Singkat 
+ 
+ 
+Tampilan ini adalah halaman "EDIT DATA MEKANIK" yang bertujuan untuk 
+memperbarui informasi seorang mekanik. 
+• Elemen Utama: Terdapat tiga kolom input untuk NAMA, ALAMAT, dan NO. TELP 
+(Nomor Telepon). 
+• Fokus: Kolom ALAMAT saat ini disorot (berwarna hijau). 
+• Aksi: Terdapat dua tombol utama: BACK (Kembali) dan SUBMIT (Kirim/Simpan). 
+2. Alur Tampilan 
+Berikut alur yang mungkin terjadi berdasarkan tombol-tombol yang tersedia: 
+• Pengguna mengisi/mengubah data di kolom NAMA, ALAMAT, dan NO. TELP. 
+• Jika Pengguna memencet tombol "BACK" (Kembali): 
+o Tampilan akan beralih ke halaman sebelumnya. (Kemungkinan halaman utama 
+data mekanik atau daftar mekanik). 
+• Jika Pengguna memencet tombol "SUBMIT" (Kirim/Simpan): 
+o Data akan dikirim untuk disimpan. 
+o Jika berhasil disimpan, tampilan yang muncul selanjutnya kemungkinan 
+adalah halaman konfirmasi sukses/notifikasi data berhasil diubah atau kembali 
+ke halaman daftar data mekanik yang sudah diperbarui. 
+4.1.21  Tampilan Form Edit Mekanik 
+1. Deskripsi Singkat 
+Tampilan ini adalah halaman "EDIT DATA MEKANIK" yang menampilkan data 
+eksisting seorang mekanik yang siap untuk diubah. 
+• Data Terisi: Kolom input sudah terisi dengan data: 
+o NAMA: Haikal 
+o ALAMAT: Ciwidey, Bandung (Kolom ini disorot/highlight hijau) 
+o NO. TELP: 08245338301 
+• Aksi: Terdapat tombol BACK (Kembali) dan SUBMIT (Kirim/Simpan). 
+2. Alur Tampilan 
+Berikut alur yang mungkin terjadi berdasarkan interaksi dengan tombol-tombol yang 
+tersedia: 
+• Pengguna bisa mengubah data "Haikal", "Ciwidey, Bandung", atau "08245338301" 
+di kolom yang disediakan. 
+ 
+ 
+• Jika Pengguna memencet tombol "BACK" (Kembali): 
+o Tampilan akan beralih ke halaman sebelumnya (misalnya, halaman detail 
+mekanik atau daftar mekanik). 
+• Jika Pengguna memencet tombol "SUBMIT" (Kirim/Simpan): 
+o Data yang sudah diubah (jika ada) akan diproses untuk diperbarui. 
+o Tampilan yang muncul selanjutnya kemungkinan adalah halaman konfirmasi 
+bahwa data berhasil diperbarui atau kembali ke halaman daftar/detail mekanik 
+dengan data yang baru. 
+4.2 User Interfaces  
+Antarmuka pengguna sistem dirancang dengan tampilan sederhana, mudah digunakan, dan 
+konsisten di seluruh halaman. Setiap halaman memiliki navigasi utama di bagian atas, tombol aksi 
+yang jelas, serta warna dan ikon yang membantu pengguna mengenali fungsi fitur dengan cepat. 
+● Komponen Utama Antarmuka: 
+○ Halaman Login: Form untuk memasukkan username dan password dengan validasi 
+input. 
+○ Dashboard Utama: Menampilkan ringkasan data pelanggan, kendaraan, servis, stok 
+barang, dan laporan harian. 
+○ Menu Navigasi: Tersedia menu Pelanggan, Kendaraan, Servis, Stok Barang, 
+Mekanik, dan Laporan. 
+○ Form Input dan Edit Data: Menggunakan layout dua kolom dengan label di kiri dan 
+kolom input di kanan. 
+○ Pesan Sistem: Menampilkan notifikasi keberhasilan, kesalahan, dan konfirmasi 
+menggunakan alert box. 
+○ Desain Responsif: Menyesuaikan dengan ukuran layar laptop dan PC. 
+○ Standar GUI: Menggunakan tema warna dominan biru dan abu-abu dengan font sans-
+serif yang mudah dibaca. 
+  
+ 
+ 
+Berikut merupakan tampilan User Interface. 
+2. Tampilan Login 
+ 
+3. Tampilan Loading 
+ 
+4. Tampilan Dashboard Owner 
+ 
+ 
+
+ 
+ 
+5. Tampilan Filter Laporan Service 
+ 
+6. Tampilan Filter Laporan Keuangan 
+ 
+7. Tampilan Kelola Stok Sparepart Owner 
+ 
+ 
+ 
+
+ 
+ 
+8. Tampilan Dashboard Admin 
+ 
+9. Tampilan Data Pelanggan 
+ 
+10. Tampilan Data Mekanik 
+ 
+ 
+ 
+
+ 
+ 
+11. Tampilan Data Sparepart 
+ 
+12. Tampilan Data Kendaraan  
+ 
+13. Tampilan Pembayaran 
+ 
+ 
+ 
+
+ 
+ 
+14. Tampilan Konfirmasi Pembayaran 
+ 
+15. Tampilan Form Tambah Kendaraan 
+ 
+16. Tampilan Form Edit Kendaraan 
+ 
+  
+
+ 
+ 
+17. Tampilan Form Tambah Pelanggan 
+ 
+18. Tampilan Form Edit Pelanggan 
+ 
+19. Tampilan Form Tambah Sparepart 
+ 
+ 
+
+ 
+ 
+20. Tampilan Form Edit Sparepart  
+ 
+21. Tampilan Form Tambah Mekanik 
+ 
+22. Tampilan Form Edit Mekanik 
+ 
+
+ 
+ 
+4.3 Hardware Interface 
+Sistem memerlukan perangkat keras yang mendukung operasi berbasis web dengan 
+spesifikasi minimum sebagai berikut: 
+● Server: 
+○ Prosesor minimal Intel Core i3 atau setara. 
+○ RAM minimal 2 GB. 
+○ Kapasitas penyimpanan minimal 20 GB. 
+○ Mendukung sistem operasi Windo ws, Linux, atau macOS. 
+● Client: 
+○ Komputer atau laptop dengan koneksi internet. 
+○ Resolusi layar minimal 1366x768. 
+○ Browser modern (Chrome, Firefox, Edge). 
+● Perangkat Tambahan: 
+○ Printer (opsional) untuk mencetak laporan transaksi dan data servis. 
+4.4 Software Interface 
+Sistem berinteraksi dengan beberapa komponen perangkat lunak lainnya untuk memastikan 
+fungsionalitas berjalan dengan baik. 
+● Database Management System: MySQL atau MariaDB digunakan untuk menyimpan 
+seluruh data pelanggan, kendaraan, stok, dan transaksi. 
+● Web Server: Apache (melalui XAMPP/LAMP) digunakan sebagai server utama. 
+● Bahasa Pemrograman: PHP 8.x untuk logika backend, HTML5, CSS3 
+(TailwindCSS/Bootstrap), dan JavaScript untuk antarmuka pengguna. 
+● Sistem Operasi: Kompatibel dengan Windows, Linux, dan macOS. 
+● Library Pendukung: 
+○ PHPMyAdmin untuk administrasi database. 
+○ Chart.js untuk menampilkan laporan dalam bentuk grafik. 
+● Browser Kompatibilitas: Mendukung Chrome, Firefox, Edge, dan Safari versi terbaru. 
+4.5 Communication Interface 
+Sistem beroperasi menggunakan protokol komunikasi berbasis web dengan standar keamanan 
+dasar. 
+● Protokol Komunikasi: HTTP/HTTPS untuk pertukaran data antara client dan server. 
+ 
+ 
+● Format Data: HTML dan JSON digunakan untuk pertukaran data antara frontend dan 
+backend. 
+● Keamanan Komunikasi: 
+○ Penggunaan HTTPS disarankan untuk mengenkripsi data. 
+○ Validasi input pada sisi client dan server untuk mencegah serangan injeksi. 
+● Koneksi Jaringan: Sistem dapat diakses melalui jaringan lokal (LAN) maupun internet. 
+● Kecepatan Akses: Disarankan minimal 1 Mbps untuk performa optimal. 
+Port yang Digunakan: Port 80 untuk HTTP dan port 443 untuk HTTPS. 
+5 Non Functional Requirement 
+ID Parameter Kebutuhan 
+NFR-01 Availability Sistem harus dapat diakses setiap hari selama jam operasional 
+bengkel (08.00– 20.00) tanpa gangguan, dengan tingkat 
+ketersediaan minimal 95%. 
+NFR-02 Reliability Sistem harus mampu menyimpan dan menampilkan data 
+pelanggan, transaksi, serta laporan dengan akurat tanpa 
+kehilangan data. Toleransi kesalahan maksimal 1% dari total 
+transaksi bulanan. 
+NFR-03 Ergonomy Antarmuka sistem harus sederhana, mudah dipahami, dan 
+konsisten antar halaman agar dapat digunakan oleh admin dan 
+pemilik bengkel tanpa pelatihan teknis mendalam. 
+NFR-04 Portability Sistem berbasis web harus dapat berjalan pada berbagai sistem 
+operasi seperti Windows, Linux, dan macOS, serta dapat diakses 
+melalui browser Chrome, Firefox, dan Edge tanpa instalasi 
+tambahan. 
+NFR-05 Memory Aplikasi dan database sistem harus mampu berjalan optimal pada 
+server dengan RAM minimal 2 GB dan ruang penyimpanan 20 
+GB tanpa menimbulkan keterlambatan signifikan. 
+NFR-06 Response time Sistem harus mampu menampilkan halaman utama atau hasil 
+pencarian data dalam waktu maksimal 3 detik pada koneksi 
+internet 1 Mbps. 
+ 
+ 
+ID Parameter Kebutuhan 
+NFR-07 Safety Tidak berlaku (N/A) karena sistem ini tidak berhubungan 
+langsung dengan keselamatan manusia. 
+NFR-08 Security Sistem harus menggunakan autentikasi login dengan username 
+dan password terenkripsi (menggunakan password_hash). 
+Setiap pengguna memiliki hak akses berbeda sesuai peran 
+(Admin, Mekanik, Pemilik). Selain itu, sistem harus mencegah 
+SQL Injection dan validasi input di sisi server maupun client. 
+NFR-09 Others 1: 
+Bahasa 
+komunikasi 
+Semua teks, pesan sistem, dan laporan ditampilkan dalam bahasa 
+Indonesia untuk memudahkan pengguna non- teknis. Setiap 
+halaman sistem wajib menampilkan identitas bengkel “Fatia 
+Kamal” di header aplikasi 
+ 

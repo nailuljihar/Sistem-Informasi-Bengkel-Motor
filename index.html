@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sistem Informasi Bengkel Fatia</title>
+    <script>
+      window.addEventListener('error', function(e) {
+        document.body.innerHTML += '<div style="color:red;z-index:9999;position:absolute;top:0;left:0;background:white;padding:20px;width:100%">' + e.error.message + '<br/><pre>' + e.error.stack + '</pre></div>';
+      });
+      window.addEventListener('unhandledrejection', function(e) {
+        document.body.innerHTML += '<div style="color:red;z-index:9999;position:absolute;top:0;left:0;background:white;padding:20px;width:100%">' + e.reason.message + '<br/><pre>' + e.reason.stack + '</pre></div>';
+      });
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
