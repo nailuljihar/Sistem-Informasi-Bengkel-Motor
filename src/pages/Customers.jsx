@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
-import { useLocalStorage } from '../hooks/useLocalStorage';
+import React, { useState, useEffect } from 'react';
+import { supabase } from '../lib/supabase';
 import Modal from '../components/Modal';
 import CustomSelect from '../components/CustomSelect';
 import { Plus, Edit2, Trash2 } from 'lucide-react';
 
 const Customers = () => {
-  const [customers, setCustomers] = useLocalStorage('bengkel_customers', []);
+  const [customers, setCustomers] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingId, setEditingId] = useState(null);
   
@@ -15,6 +16,33 @@ const Customers = () => {
     noTelp: '',
     jenisKelamin: 'Laki-Laki'
   });
+
+  useEffect(() => {
+    fetchCustomers();
+  }, []);
+
+  const fetchCustomers = async () => {
+    try {
+      setIsLoading(true);
+      const { data, error } = await supabase
+        .from('pelanggan')
+        .select('*')
+        .order('created_at', { ascending: false });
+        
+      if (data) {
+        setCustomers(data.map(c => ({
+          ...c,
+          noTelp: c.no_telp || c.noTelp,
+          jenisKelamin: c.jenis_kelamin || c.jenisKelamin
+        })));
+      }
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      alert('Gagal mengambil data pelanggan!');
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handleOpenModal = (customer = null) => {
     if (customer) {
@@ -27,20 +55,59 @@ const Customers = () => {
     setIsModalOpen(true);
   };
 
-  const handleDelete = (id) => {
+  const handleDelete = async (id) => {
     if (window.confirm('Yakin ingin menghapus data pelanggan ini?')) {
-      setCustomers(customers.filter(c => c.id !== id));
+      try {
+        const { error } = await supabase.from('pelanggan').delete().eq('id', id);
+        if (error) throw error;
+        setCustomers(customers.filter(c => c.id !== id));
+      } catch (error) {
+        console.error('Error deleting:', error);
+        alert('Gagal menghapus data pelanggan!');
+      }
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (editingId) {
-      setCustomers(customers.map(c => c.id === editingId ? { ...formData, id: editingId } : c));
-    } else {
-      setCustomers([...customers, { ...formData, id: Date.now().toString() }]);
+    try {
+      if (editingId) {
+        const { error } = await supabase
+          .from('pelanggan')
+          .update({
+            nama: formData.nama,
+            alamat: formData.alamat,
+            no_telp: formData.noTelp,
+            jenis_kelamin: formData.jenisKelamin
+          })
+          .eq('id', editingId);
+        if (error) throw error;
+        
+        setCustomers(customers.map(c => c.id === editingId ? { ...formData, id: editingId } : c));
+      } else {
+        const { data, error } = await supabase
+          .from('pelanggan')
+          .insert([{
+            nama: formData.nama,
+            alamat: formData.alamat,
+            no_telp: formData.noTelp,
+            jenis_kelamin: formData.jenisKelamin
+          }])
+          .select();
+        if (error) throw error;
+        if (data) {
+          setCustomers([{
+            ...data[0],
+            noTelp: data[0].no_telp,
+            jenisKelamin: data[0].jenis_kelamin
+          }, ...customers]);
+        }
+      }
+      setIsModalOpen(false);
+    } catch (error) {
+      console.error('Error saving data:', error);
+      alert('Gagal menyimpan data pelanggan!');
     }
-    setIsModalOpen(false);
   };
 
   return (
@@ -72,7 +139,13 @@ const Customers = () => {
               </tr>
             </thead>
             <tbody>
-              {customers.length > 0 ? customers.map((customer, index) => (
+              {isLoading ? (
+                <tr>
+                  <td colSpan="6" className="text-center py-8 text-secondary" style={{ textAlign: 'center', padding: '2rem 0' }}>
+                    Memuat data...
+                  </td>
+                </tr>
+              ) : customers.length > 0 ? customers.map((customer, index) => (
                 <tr key={customer.id}>
                   <td data-label="No">{index + 1}</td>
                   <td data-label="Nama Pelanggan" style={{ fontWeight: '600' }}>{customer.nama}</td>

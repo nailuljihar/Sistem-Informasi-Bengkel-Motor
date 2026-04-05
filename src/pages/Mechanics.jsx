@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
-import { useLocalStorage } from '../hooks/useLocalStorage';
+import React, { useState, useEffect } from 'react';
+import { supabase } from '../lib/supabase';
 import Modal from '../components/Modal';
 import { Plus, Edit2, Trash2 } from 'lucide-react';
 
 const Mechanics = () => {
-  const [mechanics, setMechanics] = useLocalStorage('bengkel_mechanics', []);
+  const [mechanics, setMechanics] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingId, setEditingId] = useState(null);
   
@@ -13,6 +14,33 @@ const Mechanics = () => {
     alamat: '',
     noTelp: ''
   });
+
+  useEffect(() => {
+    fetchMechanics();
+  }, []);
+
+  const fetchMechanics = async () => {
+    try {
+      setIsLoading(true);
+      const { data, error } = await supabase
+        .from('mekanik')
+        .select('*')
+        .order('created_at', { ascending: false });
+        
+      if (error) throw error;
+      if (data) {
+        setMechanics(data.map(m => ({
+          ...m,
+          noTelp: m.no_telp || m.noTelp
+        })));
+      }
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      alert('Gagal mengambil data mekanik!');
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handleOpenModal = (item = null) => {
     if (item) {
@@ -25,20 +53,56 @@ const Mechanics = () => {
     setIsModalOpen(true);
   };
 
-  const handleDelete = (id) => {
+  const handleDelete = async (id) => {
     if (window.confirm('Yakin ingin menghapus data mekanik ini?')) {
-      setMechanics(mechanics.filter(m => m.id !== id));
+      try {
+        const { error } = await supabase.from('mekanik').delete().eq('id', id);
+        if (error) throw error;
+        setMechanics(mechanics.filter(m => m.id !== id));
+      } catch (error) {
+        console.error('Error deleting:', error);
+        alert('Gagal menghapus data mekanik!');
+      }
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (editingId) {
-      setMechanics(mechanics.map(m => m.id === editingId ? { ...formData, id: editingId } : m));
-    } else {
-      setMechanics([...mechanics, { ...formData, id: Date.now().toString() }]);
+    try {
+      if (editingId) {
+        const { error } = await supabase
+          .from('mekanik')
+          .update({
+            nama: formData.nama,
+            alamat: formData.alamat,
+            no_telp: formData.noTelp
+          })
+          .eq('id', editingId);
+        if (error) throw error;
+        
+        setMechanics(mechanics.map(m => m.id === editingId ? { ...formData, id: editingId } : m));
+      } else {
+        const { data, error } = await supabase
+          .from('mekanik')
+          .insert([{
+            nama: formData.nama,
+            alamat: formData.alamat,
+            no_telp: formData.noTelp
+          }])
+          .select();
+        if (error) throw error;
+        if (data) {
+          setMechanics([{
+            ...data[0],
+            noTelp: data[0].no_telp
+          }, ...mechanics]);
+        }
+      }
+      setIsModalOpen(false);
+    } catch (error) {
+      console.error('Error saving data:', error);
+      alert('Gagal menyimpan data mekanik!');
     }
-    setIsModalOpen(false);
   };
 
   return (
@@ -67,7 +131,13 @@ const Mechanics = () => {
               </tr>
             </thead>
             <tbody>
-              {mechanics.length > 0 ? mechanics.map((item, index) => (
+              {isLoading ? (
+                <tr>
+                  <td colSpan="5" className="text-secondary" style={{ textAlign: 'center', padding: '2rem 0' }}>
+                    Memuat data...
+                  </td>
+                </tr>
+              ) : mechanics.length > 0 ? mechanics.map((item, index) => (
                 <tr key={item.id}>
                   <td data-label="No">{index + 1}</td>
                   <td data-label="Nama Mekanik" style={{ fontWeight: '600' }}>{item.nama}</td>

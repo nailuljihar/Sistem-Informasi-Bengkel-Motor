@@ -1,14 +1,15 @@
-import React, { useState } from 'react';
-import { useLocalStorage } from '../hooks/useLocalStorage';
+import React, { useState, useEffect } from 'react';
+import { supabase } from '../lib/supabase';
 import Modal from '../components/Modal';
 import CustomSelect from '../components/CustomSelect';
 import { Plus, CreditCard } from 'lucide-react';
 
 const Payments = () => {
-  const [transactions, setTransactions] = useLocalStorage('bengkel_transactions', []);
-  const [customers] = useLocalStorage('bengkel_customers', []);
-  const [vehicles] = useLocalStorage('bengkel_vehicles', []);
-  const [spareparts, setSpareparts] = useLocalStorage('bengkel_spareparts', []);
+  const [transactions, setTransactions] = useState([]);
+  const [customers, setCustomers] = useState([]);
+  const [vehicles, setVehicles] = useState([]);
+  const [spareparts, setSpareparts] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
@@ -21,6 +22,54 @@ const Payments = () => {
     selectedItems: [] // { sparepartId, qty, price }
   });
 
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    try {
+      setIsLoading(true);
+      const [transRes, custRes, vehRes, partsRes] = await Promise.all([
+        supabase.from('transaksi').select('*, transaksi_item(*)').order('created_at', { ascending: false }),
+        supabase.from('pelanggan').select('*'),
+        supabase.from('kendaraan').select('*'),
+        supabase.from('sparepart').select('*')
+      ]);
+
+      if (transRes.data) {
+        // Map data back to match UI
+        const mappedTrans = transRes.data.map(t => ({
+          ...t,
+          customerId: t.customer_id,
+          pelangganName: t.pelanggan_name,
+          kendaraanName: t.kendaraan_name,
+          serviceBiaya: t.service_biaya,
+          items: t.transaksi_item.map(i => ({
+            sparepartId: i.sparepart_id,
+            nama: i.nama,
+            qty: i.qty,
+            price: i.price
+          }))
+        }));
+        setTransactions(mappedTrans);
+      }
+      if (custRes.data) setCustomers(custRes.data);
+      if (vehRes.data) {
+          setVehicles(vehRes.data.map(v => ({
+              ...v, 
+              customerId: v.customer_id, 
+              namaKendaraan: v.nama_kendaraan, 
+              noPlat: v.no_plat
+          })));
+      }
+      if (partsRes.data) setSpareparts(partsRes.data);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const handleOpenModal = () => {
     setFormData({ customerId: '', vehicleId: '', serviceBiaya: 0, selectedItems: [] });
     setIsModalOpen(true);
@@ -28,16 +77,16 @@ const Payments = () => {
 
   const handleAddItem = (partId) => {
     if(!partId) return;
-    const part = spareparts.find(s => s.id === partId);
+    const part = spareparts.find(s => s.id == partId);
     if (!part) return;
 
-    const existingItem = formData.selectedItems.find(i => i.sparepartId === partId);
+    const existingItem = formData.selectedItems.find(i => i.sparepartId == partId);
     if (existingItem) {
       if (existingItem.qty >= part.stok) return alert('Stok tidak mencukupi!');
       setFormData({
         ...formData,
         selectedItems: formData.selectedItems.map(i => 
-          i.sparepartId === partId ? { ...i, qty: i.qty + 1 } : i
+          i.sparepartId == partId ? { ...i, qty: i.qty + 1 } : i
         )
       });
     } else {
@@ -70,33 +119,55 @@ const Payments = () => {
     setIsConfirmOpen(true);
   };
 
-  const executePayment = () => {
-    // Reduce Stock
-    let newSpareparts = [...spareparts];
-    formData.selectedItems.forEach(item => {
-      newSpareparts = newSpareparts.map(sp => 
-        sp.id === item.sparepartId ? { ...sp, stok: sp.stok - item.qty } : sp
-      );
-    });
-    setSpareparts(newSpareparts);
+  const executePayment = async () => {
+    try {
+      const customer = customers.find(c => c.id == formData.customerId);
+      const vehicle = vehicles.find(v => v.id == formData.vehicleId);
+      
+      const transTotal = calculateTotal();
 
-    // Save Transaction
-    const customer = customers.find(c => c.id === formData.customerId);
-    const vehicle = vehicles.find(v => v.id === formData.vehicleId);
-    
-    const newTransaction = {
-      id: Date.now().toString(),
-      tanggal: new Date().toISOString(),
-      customerId: formData.customerId,
-      pelangganName: customer ? customer.nama : 'Unknown',
-      kendaraanName: vehicle ? vehicle.namaKendaraan : 'Unknown',
-      items: formData.selectedItems,
-      serviceBiaya: parseInt(formData.serviceBiaya) || 0,
-      total: calculateTotal()
-    };
+      // 1. Insert Transaction
+      const { data: transData, error: transError } = await supabase
+        .from('transaksi')
+        .insert([{
+          customer_id: formData.customerId,
+          pelanggan_name: customer ? customer.nama : 'Unknown',
+          kendaraan_name: vehicle ? `${vehicle.namaKendaraan} - ${vehicle.noPlat}` : 'Unknown',
+          service_biaya: parseInt(formData.serviceBiaya) || 0,
+          total: transTotal
+        }])
+        .select();
 
-    setTransactions([newTransaction, ...transactions]);
-    setIsConfirmOpen(false);
+      if (transError) throw transError;
+      const transactionId = transData[0].id;
+
+      // 2. Insert Items & Reduce Stock
+      if (formData.selectedItems.length > 0) {
+        const itemsToInsert = formData.selectedItems.map(item => ({
+          transaksi_id: transactionId,
+          sparepart_id: item.sparepartId,
+          nama: item.nama,
+          qty: item.qty,
+          price: item.price
+        }));
+
+        const { error: itemsError } = await supabase.from('transaksi_item').insert(itemsToInsert);
+        if (itemsError) throw itemsError;
+
+        for (const item of formData.selectedItems) {
+            const part = spareparts.find(s => s.id == item.sparepartId);
+            if(part) {
+                await supabase.from('sparepart').update({ stok: part.stok - item.qty }).eq('id', item.sparepartId);
+            }
+        }
+      }
+
+      await fetchData();
+      setIsConfirmOpen(false);
+    } catch (error) {
+      console.error('Error saving transaction:', error);
+      alert('Gagal menyimpan transaksi. Pastikan internet lancar.');
+    }
   };
 
   const handlePrintReceipt = (t) => {
@@ -125,7 +196,7 @@ const Payments = () => {
             <table className="data-table">
               <thead>
                 <tr>
-                  <th>No</th>
+                  <th>No/ID</th>
                   <th>Tanggal</th>
                   <th>Pelanggan</th>
                   <th>Kendaraan</th>
@@ -135,10 +206,14 @@ const Payments = () => {
                 </tr>
               </thead>
               <tbody>
-                {transactions.length > 0 ? transactions.map((t, index) => (
+                {isLoading ? (
+                  <tr>
+                    <td colSpan="7" className="text-center text-secondary py-8" style={{ padding: '2rem 0', textAlign: 'center' }}>Memuat data Transaksi...</td>
+                  </tr>
+                ) : transactions.length > 0 ? transactions.map((t, index) => (
                   <tr key={t.id}>
-                    <td data-label="No">{index + 1}</td>
-                    <td data-label="Tanggal">{new Date(t.tanggal).toLocaleDateString('id-ID')}</td>
+                    <td data-label="No/ID" style={{ fontWeight: '500' }}>#{t.id}</td>
+                    <td data-label="Tanggal">{new Date(t.created_at).toLocaleDateString('id-ID')}</td>
                     <td data-label="Pelanggan" style={{ fontWeight: '600' }}>{t.pelangganName}</td>
                     <td data-label="Kendaraan">{t.kendaraanName}</td>
                     <td data-label="Sparepart Digunakan">
@@ -186,10 +261,10 @@ const Payments = () => {
                value={formData.vehicleId} 
                onChange={e => setFormData({...formData, vehicleId: e.target.value})}
                disabled={!formData.customerId}
-               options={vehicles.filter(v => v.customerId === formData.customerId).map(v => ({ value: v.id, label: `${v.namaKendaraan} - ${v.noPlat}` }))}
+               options={vehicles.filter(v => v.customerId == formData.customerId).map(v => ({ value: v.id, label: `${v.namaKendaraan} - ${v.noPlat}` }))}
                placeholder="Pilih Kendaraan"
             />
-            {formData.customerId && vehicles.filter(v => v.customerId === formData.customerId).length === 0 && (
+            {formData.customerId && vehicles.filter(v => v.customerId == formData.customerId).length === 0 && (
                <p className="text-danger mt-2 text-sm">Pelanggan ini belum memiliki data kendaraan.</p>
             )}
           </div>
@@ -262,7 +337,7 @@ const Payments = () => {
         <div className="print-receipt" style={{ display: 'none' }}>
           <div style={{ textAlign: 'center', marginBottom: '20px' }}>
             <h2 style={{ fontSize: '24px', fontWeight: 'bold' }}>BENGKEL MOTOR FATIA KAMAL</h2>
-            <p>Sistem Informasi & Manajemen Bengkel</p>
+            <p>Bukti Pembayaran / Nota Transaksi</p>
           </div>
           <hr style={{ borderTop: '2px dashed #000', margin: '20px 0' }} />
           <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px' }}>
@@ -271,8 +346,8 @@ const Payments = () => {
               <p><strong>Kendaraan:</strong> {printingData.kendaraanName}</p>
             </div>
             <div style={{ textAlign: 'right' }}>
-              <p><strong>Tanggal:</strong> {new Date(printingData.tanggal).toLocaleString('id-ID')}</p>
-              <p><strong>ID Nota:</strong> {printingData.id.slice(-6).toUpperCase()}</p>
+              <p><strong>Tanggal:</strong> {new Date(printingData.created_at).toLocaleString('id-ID')}</p>
+              <p><strong>ID Nota:</strong> {printingData.id}</p>
             </div>
           </div>
           <table style={{ width: '100%', borderCollapse: 'collapse', marginBottom: '20px' }}>
@@ -313,10 +388,28 @@ const Payments = () => {
       {/* Global Print Styles for this page */}
       <style dangerouslySetInnerHTML={{__html: `
         @media print {
-          body { background: white !important; color: black !important; margin: 0; padding: 0; }
-          .sidebar, .page-header, .print-hidden, button, .modal-overlay { display: none !important; }
-          .main-content { margin-left: 0 !important; padding: 20px !important; }
-          .print-receipt { display: block !important; width: 100%; color: black; font-family: monospace; }
+          html, body {
+            margin: 0 !important;
+            padding: 0 !important;
+            background: white !important;
+          }
+          body * {
+            visibility: hidden;
+          }
+          .print-receipt, .print-receipt * {
+            visibility: visible;
+          }
+          .print-receipt {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            max-width: 80mm; /* Standar struk thermal */
+            display: block !important;
+            color: black;
+            font-family: monospace;
+            padding: 10px;
+          }
         }
       `}} />
     </div>

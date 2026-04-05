@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
-import { useLocalStorage } from '../hooks/useLocalStorage';
+import React, { useState, useEffect } from 'react';
+import { supabase } from '../lib/supabase';
 import Modal from '../components/Modal';
 import CustomSelect from '../components/CustomSelect';
 import { Plus, Edit2, Trash2 } from 'lucide-react';
 
 const Vehicles = () => {
-  const [vehicles, setVehicles] = useLocalStorage('bengkel_vehicles', []);
-  const [customers] = useLocalStorage('bengkel_customers', []);
+  const [vehicles, setVehicles] = useState([]);
+  const [customers, setCustomers] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingId, setEditingId] = useState(null);
   
@@ -16,6 +17,38 @@ const Vehicles = () => {
     noPlat: '',
     keluhan: ''
   });
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    try {
+      setIsLoading(true);
+      const [vehiclesRes, customersRes] = await Promise.all([
+        supabase.from('kendaraan').select('*').order('created_at', { ascending: false }),
+        supabase.from('pelanggan').select('id, nama')
+      ]);
+
+      if (vehiclesRes.error) throw vehiclesRes.error;
+      if (customersRes.error) throw customersRes.error;
+
+      if (vehiclesRes.data) {
+        setVehicles(vehiclesRes.data.map(v => ({
+          ...v,
+          customerId: v.customer_id || v.customerId,
+          namaKendaraan: v.nama_kendaraan || v.namaKendaraan,
+          noPlat: v.no_plat || v.noPlat
+        })));
+      }
+      if (customersRes.data) setCustomers(customersRes.data);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      alert('Gagal mengambil data kendaraan atau pelanggan!');
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handleOpenModal = (item = null) => {
     if (item) {
@@ -28,20 +61,59 @@ const Vehicles = () => {
     setIsModalOpen(true);
   };
 
-  const handleDelete = (id) => {
+  const handleDelete = async (id) => {
     if (window.confirm('Yakin ingin menghapus data kendaraan ini?')) {
-      setVehicles(vehicles.filter(v => v.id !== id));
+      try {
+        const { error } = await supabase.from('kendaraan').delete().eq('id', id);
+        if (error) throw error;
+        setVehicles(vehicles.filter(v => v.id !== id));
+      } catch (error) {
+        console.error('Error deleting:', error);
+        alert('Gagal menghapus data kendaraan!');
+      }
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (editingId) {
-      setVehicles(vehicles.map(v => v.id === editingId ? { ...formData, id: editingId } : v));
-    } else {
-      setVehicles([...vehicles, { ...formData, id: Date.now().toString() }]);
+    try {
+      if (editingId) {
+        const { error } = await supabase
+          .from('kendaraan')
+          .update({
+            customer_id: formData.customerId,
+            nama_kendaraan: formData.namaKendaraan,
+            no_plat: formData.noPlat,
+            keluhan: formData.keluhan
+          })
+          .eq('id', editingId);
+        if (error) throw error;
+        setVehicles(vehicles.map(v => v.id === editingId ? { ...formData, id: editingId } : v));
+      } else {
+        const { data, error } = await supabase
+          .from('kendaraan')
+          .insert([{
+            customer_id: formData.customerId,
+            nama_kendaraan: formData.namaKendaraan,
+            no_plat: formData.noPlat,
+            keluhan: formData.keluhan
+          }])
+          .select();
+        if (error) throw error;
+        if (data) {
+           setVehicles([{
+             ...data[0],
+             customerId: data[0].customer_id,
+             namaKendaraan: data[0].nama_kendaraan,
+             noPlat: data[0].no_plat
+           }, ...vehicles]);
+        }
+      }
+      setIsModalOpen(false);
+    } catch (error) {
+      console.error('Error saving data:', error);
+      alert('Gagal menyimpan data kendaraan!');
     }
-    setIsModalOpen(false);
   };
 
   const getCustomerName = (id) => {
@@ -76,7 +148,13 @@ const Vehicles = () => {
               </tr>
             </thead>
             <tbody>
-              {vehicles.length > 0 ? vehicles.map((item, index) => {
+              {isLoading ? (
+                <tr>
+                  <td colSpan="6" className="text-secondary" style={{ textAlign: 'center', padding: '2rem 0' }}>
+                    Memuat data...
+                  </td>
+                </tr>
+              ) : vehicles.length > 0 ? vehicles.map((item, index) => {
                 const customer = customers.find(c => c.id === item.customerId);
                 return (
                 <tr key={item.id}>
