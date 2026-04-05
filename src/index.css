@@ -398,12 +398,12 @@ select.form-input option {
 }
 
 /* Responsive */
-@media (max-width: 1024px) {
+@media screen and (max-width: 1024px) {
   .grid-cols-4 { grid-template-columns: repeat(2, 1fr); }
   .grid-cols-3 { grid-template-columns: repeat(2, 1fr); }
 }
 
-@media (max-width: 768px) {
+@media screen and (max-width: 768px) {
   .mobile-header { display: flex; }
   .sidebar-overlay { display: block; }
   .app-layout { 

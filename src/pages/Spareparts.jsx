@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
-import { useLocalStorage } from '../hooks/useLocalStorage';
+import React, { useState, useEffect } from 'react';
+import { supabase } from '../lib/supabase';
 import Modal from '../components/Modal';
 import { Plus, Edit2, Trash2 } from 'lucide-react';
 
 const Spareparts = () => {
-  const [spareparts, setSpareparts] = useLocalStorage('bengkel_spareparts', []);
+  const [spareparts, setSpareparts] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingId, setEditingId] = useState(null);
   
@@ -14,10 +15,36 @@ const Spareparts = () => {
     harga: 0
   });
 
+  useEffect(() => {
+    fetchSpareparts();
+  }, []);
+
+  const fetchSpareparts = async () => {
+    try {
+      setIsLoading(true);
+      const { data, error } = await supabase
+        .from('sparepart')
+        .select('*')
+        .order('created_at', { ascending: false });
+        
+      if (error) throw error;
+      if (data) setSpareparts(data);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      alert('Gagal mengambil data sparepart!');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const handleOpenModal = (item = null) => {
     if (item) {
       setEditingId(item.id);
-      setFormData(item);
+      setFormData({
+        nama: item.nama,
+        stok: item.stok,
+        harga: item.harga
+      });
     } else {
       setEditingId(null);
       setFormData({ nama: '', stok: 0, harga: 0 });
@@ -25,20 +52,51 @@ const Spareparts = () => {
     setIsModalOpen(true);
   };
 
-  const handleDelete = (id) => {
+  const handleDelete = async (id) => {
     if (window.confirm('Yakin ingin menghapus data sparepart ini?')) {
-      setSpareparts(spareparts.filter(s => s.id !== id));
+      try {
+        const { error } = await supabase.from('sparepart').delete().eq('id', id);
+        if (error) throw error;
+        setSpareparts(spareparts.filter(s => s.id !== id));
+      } catch (error) {
+        console.error('Error deleting:', error);
+        alert('Gagal menghapus data sparepart!');
+      }
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (editingId) {
-      setSpareparts(spareparts.map(s => s.id === editingId ? { ...formData, id: editingId } : s));
-    } else {
-      setSpareparts([...spareparts, { ...formData, id: Date.now().toString() }]);
+    try {
+      if (editingId) {
+        const { error } = await supabase
+          .from('sparepart')
+          .update({
+            nama: formData.nama,
+            stok: formData.stok,
+            harga: formData.harga
+          })
+          .eq('id', editingId);
+        if (error) throw error;
+        setSpareparts(spareparts.map(s => s.id === editingId ? { ...s, ...formData, id: editingId } : s));
+      } else {
+        const { data, error } = await supabase
+          .from('sparepart')
+          .insert([{
+            nama: formData.nama,
+            stok: parseInt(formData.stok) || 0,
+            harga: parseInt(formData.harga) || 0,
+            kategori: 'Umum'
+          }])
+          .select();
+        if (error) throw error;
+        if (data) setSpareparts([data[0], ...spareparts]);
+      }
+      setIsModalOpen(false);
+    } catch (error) {
+      console.error('Error saving data:', error);
+      alert('Gagal menyimpan data sparepart!');
     }
-    setIsModalOpen(false);
   };
 
   return (
@@ -68,7 +126,13 @@ const Spareparts = () => {
               </tr>
             </thead>
             <tbody>
-              {spareparts.length > 0 ? spareparts.map((item, index) => (
+              {isLoading ? (
+                <tr>
+                  <td colSpan="6" className="text-secondary" style={{ textAlign: 'center', padding: '2rem 0' }}>
+                    Memuat data...
+                  </td>
+                </tr>
+              ) : spareparts.length > 0 ? spareparts.map((item, index) => (
                 <tr key={item.id}>
                   <td data-label="No">{index + 1}</td>
                   <td data-label="Nama Sparepart" style={{ fontWeight: '600' }}>{item.nama}</td>
@@ -92,7 +156,7 @@ const Spareparts = () => {
                 </tr>
               )) : (
                 <tr>
-                  <td colSpan="5" className="text-secondary" style={{ textAlign: 'center', padding: '2rem 0' }}>
+                  <td colSpan="6" className="text-secondary" style={{ textAlign: 'center', padding: '2rem 0' }}>
                     Belum ada data sparepart.
                   </td>
                 </tr>
