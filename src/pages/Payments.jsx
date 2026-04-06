@@ -30,7 +30,7 @@ const Payments = () => {
     try {
       setIsLoading(true);
       const [transRes, custRes, vehRes, partsRes] = await Promise.all([
-        supabase.from('transaksi').select('*, transaksi_item(*)').order('created_at', { ascending: false }),
+        supabase.from('transaksi').select('*, transaksi_item(*)').order('tanggal', { ascending: false }),
         supabase.from('pelanggan').select('*'),
         supabase.from('kendaraan').select('*'),
         supabase.from('sparepart').select('*')
@@ -213,7 +213,7 @@ const Payments = () => {
                 ) : transactions.length > 0 ? transactions.map((t, index) => (
                   <tr key={t.id}>
                     <td data-label="No/ID" style={{ fontWeight: '500' }}>#{t.id}</td>
-                    <td data-label="Tanggal">{new Date(t.created_at).toLocaleDateString('id-ID')}</td>
+                    <td data-label="Tanggal">{new Date(t.tanggal).toLocaleDateString('id-ID')}</td>
                     <td data-label="Pelanggan" style={{ fontWeight: '600' }}>{t.pelangganName}</td>
                     <td data-label="Kendaraan">{t.kendaraanName}</td>
                     <td data-label="Sparepart Digunakan">
@@ -346,7 +346,7 @@ const Payments = () => {
               <p><strong>Kendaraan:</strong> {printingData.kendaraanName}</p>
             </div>
             <div style={{ textAlign: 'right' }}>
-              <p><strong>Tanggal:</strong> {new Date(printingData.created_at).toLocaleString('id-ID')}</p>
+              <p><strong>Tanggal:</strong> {new Date(printingData.tanggal).toLocaleString('id-ID')}</p>
               <p><strong>ID Nota:</strong> {printingData.id}</p>
             </div>
           </div>
@@ -404,11 +404,9 @@ const Payments = () => {
             left: 0;
             top: 0;
             width: 100%;
-            max-width: 80mm; /* Standar struk thermal */
             display: block !important;
             color: black;
-            font-family: monospace;
-            padding: 10px;
+            padding: 20px;
           }
         }
       `}} />

@@ -16,7 +16,7 @@ export const Reports = () => {
       const { data, error } = await supabase
         .from('transaksi')
         .select('*, transaksi_item(*)')
-        .order('created_at', { ascending: false });
+        .order('tanggal', { ascending: false });
 
       if (error) throw error;
       if (data) {
@@ -84,7 +84,7 @@ export const Reports = () => {
                 ) : transactions.length > 0 ? transactions.map((t, index) => (
                   <tr key={t.id}>
                     <td data-label="No/ID" style={{ fontWeight: '500' }}>#{t.id}</td>
-                    <td data-label="Tanggal">{new Date(t.created_at).toLocaleDateString('id-ID')}</td>
+                    <td data-label="Tanggal">{new Date(t.tanggal).toLocaleDateString('id-ID')}</td>
                     <td data-label="Nama Pelanggan" style={{ fontWeight: '600' }}>{t.pelangganName}</td>
                     <td data-label="Kendaraan">{t.kendaraanName}</td>
                     <td data-label="Jasa Service">Rp {(t.serviceBiaya || 0).toLocaleString('id-ID')}</td>
@@ -133,7 +133,7 @@ export const FinancialReports = () => {
                 const { data, error } = await supabase
                     .from('transaksi')
                     .select('*')
-                    .order('created_at', { ascending: false });
+                    .order('tanggal', { ascending: false });
 
                 if (error) throw error;
                 if (data) setTransactions(data);
@@ -197,7 +197,7 @@ export const FinancialReports = () => {
                       return (
                         <tr key={t.id}>
                           <td data-label="No/ID" style={{ fontWeight: '500' }}>#{t.id}</td>
-                          <td data-label="Tanggal">{new Date(t.created_at).toLocaleDateString('id-ID')}</td>
+                          <td data-label="Tanggal">{new Date(t.tanggal).toLocaleDateString('id-ID')}</td>
                           <td data-label="Pendapatan Servis">Rp {(t.service_biaya || 0).toLocaleString('id-ID')}</td>
                           <td data-label="Pendapatan Sparepart">Rp {partTotal.toLocaleString('id-ID')}</td>
                           <td data-label="Total Transaksi" style={{ fontWeight: '700', color: 'var(--primary-color)' }}>Rp {t.total?.toLocaleString('id-ID')}</td>

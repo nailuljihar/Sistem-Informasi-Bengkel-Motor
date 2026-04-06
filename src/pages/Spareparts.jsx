@@ -85,8 +85,7 @@ const Spareparts = () => {
           .insert([{
             nama: formData.nama,
             stok: parseInt(formData.stok) || 0,
-            harga: parseInt(formData.harga) || 0,
-            kategori: 'Umum'
+            harga: parseInt(formData.harga) || 0
           }])
           .select();
         if (error) throw error;
@@ -121,14 +120,13 @@ const Spareparts = () => {
                 <th>Nama Sparepart</th>
                 <th>Stok</th>
                 <th>Harga Satuan (Rp)</th>
-                <th>Kategori</th>
                 <th>Aksi</th>
               </tr>
             </thead>
             <tbody>
               {isLoading ? (
                 <tr>
-                  <td colSpan="6" className="text-secondary" style={{ textAlign: 'center', padding: '2rem 0' }}>
+                  <td colSpan="5" className="text-secondary" style={{ textAlign: 'center', padding: '2rem 0' }}>
                     Memuat data...
                   </td>
                 </tr>
@@ -136,13 +134,12 @@ const Spareparts = () => {
                 <tr key={item.id}>
                   <td data-label="No">{index + 1}</td>
                   <td data-label="Nama Sparepart" style={{ fontWeight: '600' }}>{item.nama}</td>
-                  <td data-label="Harga">Rp {item.harga?.toLocaleString('id-ID')}</td>
                   <td data-label="Stok">
                     <span className={`badge ${item.stok <= 5 ? 'badge-danger' : 'badge-success'}`}>
                       {item.stok}
                     </span>
                   </td>
-                  <td data-label="Kategori">{item.kategori || 'Umum'}</td>
+                  <td data-label="Harga">Rp {item.harga?.toLocaleString('id-ID')}</td>
                   <td data-label="Aksi">
                     <div className="flex gap-2">
                       <button className="btn btn-outline" style={{ padding: '0.5rem' }} onClick={() => handleOpenModal(item)}>
@@ -156,7 +153,7 @@ const Spareparts = () => {
                 </tr>
               )) : (
                 <tr>
-                  <td colSpan="6" className="text-secondary" style={{ textAlign: 'center', padding: '2rem 0' }}>
+                  <td colSpan="5" className="text-secondary" style={{ textAlign: 'center', padding: '2rem 0' }}>
                     Belum ada data sparepart.
                   </td>
                 </tr>
