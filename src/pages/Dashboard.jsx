@@ -1,13 +1,41 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Users, Cog, Package, TrendingUp, Wrench } from 'lucide-react';
-import { useLocalStorage } from '../hooks/useLocalStorage';
+import { supabase } from '../lib/supabase';
 
 const Dashboard = ({ userRole }) => {
-  // Pull simulation data from localStorage to show realistic summaries
-  const [customers] = useLocalStorage('bengkel_customers', []);
-  const [mechanics] = useLocalStorage('bengkel_mechanics', []);
-  const [spareparts] = useLocalStorage('bengkel_spareparts', []);
-  const [transactions] = useLocalStorage('bengkel_transactions', []);
+  const [customers, setCustomers] = useState([]);
+  const [mechanics, setMechanics] = useState([]);
+  const [spareparts, setSpareparts] = useState([]);
+  const [transactions, setTransactions] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [transRes, custRes, mechRes, partsRes] = await Promise.all([
+          supabase.from('transaksi').select('*').order('tanggal', { ascending: false }),
+          supabase.from('pelanggan').select('id'),
+          supabase.from('mekanik').select('id'),
+          supabase.from('sparepart').select('stok')
+        ]);
+        
+        if (transRes.data) {
+          // Map snake_case from DB to camelCase exactly like how Dashboard expects it
+          const mappedTrans = transRes.data.map(t => ({
+            ...t,
+            pelangganName: t.pelanggan_name
+          }));
+          setTransactions(mappedTrans);
+        }
+        if (custRes.data) setCustomers(custRes.data);
+        if (mechRes.data) setMechanics(mechRes.data);
+        if (partsRes.data) setSpareparts(partsRes.data);
+      } catch (error) {
+        console.error('Error fetching dashboard data:', error);
+      }
+    };
+    
+    fetchData();
+  }, []);
 
   const totalIncome = transactions?.reduce((sum, t) => sum + (t.total || 0), 0) || 0;
 
